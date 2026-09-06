@@ -46,7 +46,19 @@ class RoleSeeder extends Seeder
         'memberships-access',
         'memberships-history-access',
         'questions-access',
-        'reports-access',
+        'report-sales-access',
+        'report-sold-items-access',
+        'report-booking-access',
+        'report-appointment-access',
+        'report-membership-access',
+        'report-membership-extension-access',
+        'report-membership-validity-access',
+        'report-membership-transfer-access',
+        'report-cash-access',
+        'report-authorizations-access',
+        'report-stock-mutations-access',
+        'report-trainers-access',
+        'profits-access',
     ]);
 
 

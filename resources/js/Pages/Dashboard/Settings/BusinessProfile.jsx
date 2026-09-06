@@ -10,6 +10,10 @@ export default function BusinessProfile({ setting }) {
 
     const { data, setData, post, processing, errors } = useForm({
         studio_name: setting?.studio_name || "",
+        email: setting?.email || "",
+        phone: setting?.phone || "",
+        address: setting?.address || "",
+        operational_hours: setting?.operational_hours || "",
         _method: "PUT",
     });
 
@@ -35,7 +39,7 @@ export default function BusinessProfile({ setting }) {
                     Profile Bisnis
                 </h1>
                 <p className="mt-2 max-w-3xl text-sm text-slate-500 dark:text-slate-400">
-                    Atur nama profile bisnis atau studio Anda yang akan ditampilkan di seluruh website.
+                    Atur nama profile bisnis atau studio Anda beserta kontak, alamat, dan jam operasional.
                 </p>
             </div>
 
@@ -47,11 +51,49 @@ export default function BusinessProfile({ setting }) {
                                 type="text"
                                 label="Nama Studio / Bisnis"
                                 value={data.studio_name}
-                                onChange={(event) =>
-                                    setData("studio_name", event.target.value)
-                                }
+                                onChange={(event) => setData("studio_name", event.target.value)}
                                 errors={errors?.studio_name}
                                 placeholder="Masukkan nama bisnis..."
+                            />
+                        </div>
+                        <div>
+                            <Input
+                                type="email"
+                                label="Email"
+                                value={data.email}
+                                onChange={(event) => setData("email", event.target.value)}
+                                errors={errors?.email}
+                                placeholder="nama@email.com"
+                            />
+                        </div>
+                        <div>
+                            <Input
+                                type="text"
+                                label="Nomor Telepon"
+                                value={data.phone}
+                                onChange={(event) => setData("phone", event.target.value)}
+                                errors={errors?.phone}
+                                placeholder="Contoh: 628213003567"
+                            />
+                        </div>
+                        <div>
+                            <Input
+                                type="text"
+                                label="Alamat / Lokasi"
+                                value={data.address}
+                                onChange={(event) => setData("address", event.target.value)}
+                                errors={errors?.address}
+                                placeholder="Masukkan alamat lengkap..."
+                            />
+                        </div>
+                        <div>
+                            <Input
+                                type="text"
+                                label="Jam Operasional"
+                                value={data.operational_hours}
+                                onChange={(event) => setData("operational_hours", event.target.value)}
+                                errors={errors?.operational_hours}
+                                placeholder="Contoh: Senin - Sabtu, 07:00 - 19:00 WIB"
                             />
                         </div>
                     </div>

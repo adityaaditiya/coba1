@@ -23,6 +23,13 @@ import { getImageUrl } from "@/Utils/imageUrl";
 export default function Welcome() {
     const { auth, trainers = [], membershipPlans = [], landingPageSetting = {} } = usePage().props;
 
+    const contactInfo = {
+        instagramUrl: "https://www.instagram.com/orostudio.tegal/",
+        tiktokUrl: "https://www.tiktok.com/@oropilatesstudio",
+        whatsappUrl: "https://wa.me/628213003567",
+        mapsEmbedUrl: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d247.57918158921566!2d109.1340997!3d-6.8585801!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6fb7beb29c510d%3A0x668f24c80b9bc7fc!2sORO%20Pilates%20Studio!5e0!3m2!1sid!2ssg!4v1778299454810!5m2!1sid!2ssg",
+    };
+
     const trustBadges = ["Certified Trainers", "Small Group", "Beginner Friendly"];
 
     const navItems = [
@@ -512,9 +519,9 @@ export default function Welcome() {
                                 Studio pilates modern untuk Anda yang ingin bergerak lebih baik, merasa lebih kuat, dan hidup lebih mindful.
                             </p>
                             <div className="mt-5 space-y-2 text-sm text-primary-100">
-                                <p className="flex items-center gap-2"><IconMapPin size={16} /> Jl. Layur No. 08, Kota Tegal</p>
-                                <p className="flex items-center gap-2"><IconClock size={16} /> Senin - Sabtu, 07:00 - 19:00 WIB</p>
-                                <p className="flex items-center gap-2"><IconPhone size={16} /> +62 821-3003-567</p>
+                                <p className="flex items-center gap-2"><IconMapPin size={16} /> {landingPageSetting?.address || "Jl. Layur No. 08, Kota Tegal"}</p>
+                                <p className="flex items-center gap-2"><IconClock size={16} /> {landingPageSetting?.operational_hours || "Senin - Sabtu, 07:00 - 19:00 WIB"}</p>
+                                <p className="flex items-center gap-2"><IconPhone size={16} /> {landingPageSetting?.phone || "+62 821-3003-567"}</p>
                             </div>
                         </div>
 
@@ -532,10 +539,10 @@ export default function Welcome() {
                         <div>
                             <p className="font-semibold text-white">Follow Us</p>
                             <div className="mt-4 flex items-center gap-3">
-                                <a href="https://www.instagram.com/orostudio.tegal/" className="rounded-xl border border-primary-400 p-2 hover:bg-primary-500">
+                                <a href={contactInfo.instagramUrl} className="rounded-xl border border-primary-400 p-2 hover:bg-primary-500">
                                     <IconBrandInstagram size={18} />
                                 </a>
-                                <a href="#" className="rounded-xl border border-primary-400 p-2 hover:bg-primary-500">
+                                <a href={contactInfo.tiktokUrl} className="rounded-xl border border-primary-400 p-2 hover:bg-primary-500">
                                     <IconBrandTiktok size={18} />
                                 </a>
                                 {/* <a href="#" className="rounded-xl border border-primary-400 p-2 hover:bg-primary-500">

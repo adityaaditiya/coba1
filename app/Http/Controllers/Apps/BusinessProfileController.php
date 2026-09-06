@@ -22,12 +22,20 @@ class BusinessProfileController extends Controller
     {
         $request->validate([
             'studio_name' => 'required|string|max:255',
+            'email' => 'nullable|email',
+            'phone' => 'nullable|string|max:50',
+            'address' => 'nullable|string',
+            'operational_hours' => 'nullable|string',
         ]);
 
         $setting = LandingPageSetting::firstOrCreate([], LandingPageSetting::defaultAttributes());
         
         $setting->update([
             'studio_name' => $request->studio_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'operational_hours' => $request->operational_hours,
         ]);
 
         return back()->with('success', 'Profile Bisnis berhasil diperbarui.');

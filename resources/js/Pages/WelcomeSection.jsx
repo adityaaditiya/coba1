@@ -149,15 +149,7 @@ const contactFaqs = [
     },
 ];
 
-const contactInfo = {
-    email: "oropadeltegal@gmail.com",
-    address: "Jl. Layur No. 08, Tegalsari, Kec. Tegal Barat, Kota Tegal, Jawa Tengah 52111",
-    hours: "Senin - Sabtu, 07:00 - 19:00 WIB (Public Holiday Closed)",
-    instagramUrl: "https://www.instagram.com/orostudio.tegal/",
-    tiktokUrl: "https://www.tiktok.com/@oropilatesstudio",
-    whatsappUrl: "https://wa.me/628213003567",
-    mapsEmbedUrl: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d247.57918158921566!2d109.1340997!3d-6.8585801!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6fb7beb29c510d%3A0x668f24c80b9bc7fc!2sORO%20Pilates%20Studio!5e0!3m2!1sid!2ssg!4v1778299454810!5m2!1sid!2ssg",
-};
+// contactInfo moved inside the component to access usePage().props
 
 const getDaysInMonth = (year, month) => {
     const date = new Date(year, month, 1);
@@ -195,7 +187,17 @@ export default function WelcomeSection({
     const [activeDateKey, setActiveDateKey] = useState("");
     const [selectedMonthAnchor, setSelectedMonthAnchor] = useState(null);
     const dateStripRef = useRef(null);
-    const { auth, flash, errors } = usePage().props;
+    const { auth, flash, errors, landingPageSetting } = usePage().props;
+    const contactInfo = {
+        email: landingPageSetting?.email || "oropadeltegal@gmail.com",
+        address: landingPageSetting?.address || "Jl. Layur No. 08, Tegalsari, Kec. Tegal Barat, Kota Tegal, Jawa Tengah 52111",
+        hours: landingPageSetting?.operational_hours || "Senin - Sabtu, 07:00 - 19:00 WIB (Public Holiday Closed)",
+        phone: landingPageSetting?.phone || "628213003567",
+        instagramUrl: "https://www.instagram.com/orostudio.tegal/",
+        tiktokUrl: "https://www.tiktok.com/@oropilatesstudio",
+        whatsappUrl: "https://wa.me/628213003567",
+        mapsEmbedUrl: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d247.57918158921566!2d109.1340997!3d-6.8585801!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6fb7beb29c510d%3A0x668f24c80b9bc7fc!2sORO%20Pilates%20Studio!5e0!3m2!1sid!2ssg!4v1778299454810!5m2!1sid!2ssg",
+    };
     // Di dekat useRef lainnya
     const dateInputRef = useRef(null); // Tambahkan ini
     const [selectedServiceId, setSelectedServiceId] = useState(appointmentSessionOptions[0]?.id || "");

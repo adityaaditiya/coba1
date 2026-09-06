@@ -20,6 +20,10 @@ class LandingPageSetting extends Model
         'schedule_background_image',
         'classes_background_image',
         'studio_logo_image',
+        'email',
+        'phone',
+        'address',
+        'operational_hours',
     ];
 
     public static function defaultAttributes(): array
@@ -30,6 +34,10 @@ class LandingPageSetting extends Model
             'schedule_background_image' => self::DEFAULT_SCHEDULE_BACKGROUND,
             'classes_background_image' => self::DEFAULT_CLASSES_BACKGROUND,
             'studio_logo_image' => self::DEFAULT_STUDIO_LOGO,
+            'email' => 'oropadeltegal@gmail.com',
+            'phone' => '628213003567',
+            'address' => 'Jl. Layur No. 08, Tegalsari, Kec. Tegal Barat, Kota Tegal, Jawa Tengah 52111',
+            'operational_hours' => 'Senin - Sabtu, 07:00 - 19:00 WIB (Public Holiday Closed)',
         ];
     }
 }

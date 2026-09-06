@@ -1,0 +1,18 @@
+name: Sync to Target Repo
+
+on:
+  push:
+    branches: [ "main" ] # ganti jika branch utama bernama master
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # wajib 0 agar seluruh commit history terbawa
+
+      - name: Push to Target Repo
+        run: |
+          git push --mirror https://${{ secrets.TARGET_REPO_PAT }}@github.com/adityaaditiya/coba1.git

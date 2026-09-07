@@ -188,15 +188,25 @@ export default function WelcomeSection({
     const [selectedMonthAnchor, setSelectedMonthAnchor] = useState(null);
     const dateStripRef = useRef(null);
     const { auth, flash, errors, landingPageSetting } = usePage().props;
+    
+    const formatWhatsappLink = (number) => {
+        if (!number) return "";
+        let formatted = number.replace(/\D/g, "");
+        if (formatted.startsWith("0")) {
+            formatted = "62" + formatted.slice(1);
+        }
+        return `https://wa.me/${formatted}`;
+    };
+
     const contactInfo = {
         email: landingPageSetting?.email || "oropadeltegal@gmail.com",
         address: landingPageSetting?.address || "Jl. Layur No. 08, Tegalsari, Kec. Tegal Barat, Kota Tegal, Jawa Tengah 52111",
         hours: landingPageSetting?.operational_hours || "Senin - Sabtu, 07:00 - 19:00 WIB (Public Holiday Closed)",
         phone: landingPageSetting?.phone || "628213003567",
-        instagramUrl: "https://www.instagram.com/orostudio.tegal/",
-        tiktokUrl: "https://www.tiktok.com/@oropilatesstudio",
-        whatsappUrl: "https://wa.me/628213003567",
-        mapsEmbedUrl: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d247.57918158921566!2d109.1340997!3d-6.8585801!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6fb7beb29c510d%3A0x668f24c80b9bc7fc!2sORO%20Pilates%20Studio!5e0!3m2!1sid!2ssg!4v1778299454810!5m2!1sid!2ssg",
+        instagramUrl: landingPageSetting?.instagram_url || "https://www.instagram.com/orostudio.tegal/",
+        tiktokUrl: landingPageSetting?.tiktok_url || "https://www.tiktok.com/@oropilatesstudio",
+        whatsappUrl: landingPageSetting?.whatsapp_number ? formatWhatsappLink(landingPageSetting.whatsapp_number) : "https://wa.me/628213003567",
+        mapsEmbedUrl: landingPageSetting?.embed_maps || "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d247.57918158921566!2d109.1340997!3d-6.8585801!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6fb7beb29c510d%3A0x668f24c80b9bc7fc!2sORO%20Pilates%20Studio!5e0!3m2!1sid!2ssg!4v1778299454810!5m2!1sid!2ssg",
     };
     // Di dekat useRef lainnya
     const dateInputRef = useRef(null); // Tambahkan ini
@@ -1724,8 +1734,10 @@ useEffect(() => {
                             {[...membership.classes]
                                 .sort((a, b) => a.name.localeCompare(b.name))
                                 .map((c) => (
-                                    <li key={c.id} className="leading-tight text-gray-600 hover:text-gray-900 transition-colors">
-                                        {c.name}
+                                    <li key={c.id} className="leading-tight text-gray-600 transition-colors">
+                                        <Link href={route("welcome.class-detail", c.id)} className="hover:text-primary-600 hover:underline">
+                                            {c.name}
+                                        </Link>
                                     </li>
                                 ))
                             }
@@ -1889,7 +1901,7 @@ useEffect(() => {
                                                 {/* <a
                                                     href={contactInfo.whatsappUrl}
                                                     target="_blank"
-                                                    rel="noreferrer"
+                                                    rel="noopener noreferrer"
                                                     className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20"
                                                 >
                                                     <IconBrandWhatsapp size={18} /> Hubungi Kami
@@ -1897,7 +1909,7 @@ useEffect(() => {
                                                 <a
                                                     href={contactInfo.whatsappUrl}
                                                     target="_blank"
-                                                    rel="noreferrer"
+                                                    rel="noopener noreferrer"
                                                     className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-95"
                                                 >
                                                     <IconBrandWhatsapp size={20} /> Hubungi Kami
@@ -1992,7 +2004,7 @@ useEffect(() => {
                                     {/* <a
                                         href={contactInfo.whatsappUrl}
                                         target="_blank"
-                                        rel="noreferrer"
+                                        rel="noopener noreferrer"
                                         className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-95"
                                     >
                                         <IconBrandWhatsapp size={20} /> Hubungi Kami
@@ -2003,14 +2015,14 @@ useEffect(() => {
                                     <p className="mt-3 text-sm leading-relaxed text-wellness-muted">Ikuti update class, wellness tips, dan promo terbaru melalui Instagram dan TikTok kami.</p>
 
                                     <div className="mt-6 grid gap-3">
-                                        <a href={contactInfo.instagramUrl} target="_blank" rel="noreferrer" className="flex items-center gap-4 rounded-3xl border border-slate-200 bg-gradient-to-r from-pink-50 via-white to-orange-50 p-4 transition hover:border-primary-200 hover:shadow-sm">
+                                        <a href={contactInfo.instagramUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 rounded-3xl border border-slate-200 bg-gradient-to-r from-pink-50 via-white to-orange-50 p-4 transition hover:border-primary-200 hover:shadow-sm">
                                             <div className="rounded-2xl bg-white p-3 text-pink-600 shadow-sm"><IconBrandInstagram size={24} /></div>
                                             <div>
                                                 <p className="font-semibold text-slate-900">Instagram</p>
                                                 <p className="text-sm text-wellness-muted">Lihat update studio & reels terbaru</p>
                                             </div>
                                         </a>
-                                        <a href={contactInfo.tiktokUrl} target="_blank" rel="noreferrer" className="flex items-center gap-4 rounded-3xl border border-slate-200 bg-gradient-to-r from-slate-100 via-white to-cyan-50 p-4 transition hover:border-primary-200 hover:shadow-sm">
+                                        <a href={contactInfo.tiktokUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 rounded-3xl border border-slate-200 bg-gradient-to-r from-slate-100 via-white to-cyan-50 p-4 transition hover:border-primary-200 hover:shadow-sm">
                                             <div className="rounded-2xl bg-white p-3 text-slate-900 shadow-sm"><IconBrandTiktok size={24} /></div>
                                             <div>
                                                 <p className="font-semibold text-slate-900">TikTok</p>

@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Head, useForm, usePage } from "@inertiajs/react";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import Input from "@/Components/Dashboard/Input";
 import { IconDeviceFloppy, IconBuildingStore } from "@tabler/icons-react";
-import toast from "react-hot-toast";
 
 export default function BusinessProfile({ setting }) {
-    const { flash } = usePage().props;
 
     const { data, setData, post, processing, errors } = useForm({
         studio_name: setting?.studio_name || "",
@@ -14,13 +12,12 @@ export default function BusinessProfile({ setting }) {
         phone: setting?.phone || "",
         address: setting?.address || "",
         operational_hours: setting?.operational_hours || "",
+        whatsapp_number: setting?.whatsapp_number || "",
+        embed_maps: setting?.embed_maps || "",
+        instagram_url: setting?.instagram_url || "",
+        tiktok_url: setting?.tiktok_url || "",
         _method: "PUT",
     });
-
-    useEffect(() => {
-        if (flash?.success) toast.success(flash.success);
-        if (flash?.error) toast.error(flash.error);
-    }, [flash]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -39,7 +36,7 @@ export default function BusinessProfile({ setting }) {
                     Profile Bisnis
                 </h1>
                 <p className="mt-2 max-w-3xl text-sm text-slate-500 dark:text-slate-400">
-                    Atur nama profile bisnis atau studio Anda beserta kontak, alamat, dan jam operasional.
+                    Atur nama profile bisnis atau studio Anda beserta kontak, alamat, sosial media, dan jam operasional.
                 </p>
             </div>
 
@@ -95,6 +92,53 @@ export default function BusinessProfile({ setting }) {
                                 errors={errors?.operational_hours}
                                 placeholder="Contoh: Senin - Sabtu, 07:00 - 19:00 WIB"
                             />
+                        </div>
+                        <div className="border-t border-slate-200 dark:border-slate-700 pt-6 mt-2">
+                            <h3 className="text-base font-semibold text-slate-800 dark:text-white mb-4">Kontak Ekstra & Sosial Media</h3>
+                        </div>
+                        <div>
+                            <Input
+                                type="text"
+                                label="Nomor WhatsApp"
+                                value={data.whatsapp_number}
+                                onChange={(event) => setData("whatsapp_number", event.target.value)}
+                                errors={errors?.whatsapp_number}
+                                placeholder="Contoh: 08213003567 (hanya angka)"
+                            />
+                        </div>
+                        <div>
+                            <Input
+                                type="url"
+                                label="Link Instagram"
+                                value={data.instagram_url}
+                                onChange={(event) => setData("instagram_url", event.target.value)}
+                                errors={errors?.instagram_url}
+                                placeholder="https://www.instagram.com/..."
+                            />
+                        </div>
+                        <div>
+                            <Input
+                                type="url"
+                                label="Link TikTok"
+                                value={data.tiktok_url}
+                                onChange={(event) => setData("tiktok_url", event.target.value)}
+                                errors={errors?.tiktok_url}
+                                placeholder="https://www.tiktok.com/@..."
+                            />
+                        </div>
+                        <div>
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-2">Embed Google Maps (URL / Iframe)</label>
+                            <textarea
+                                className={`w-full p-4 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 min-h-[120px] ${errors?.embed_maps ? "border-danger-500 focus:border-danger-500 focus:ring-danger-500/20" : ""}`}
+                                value={data.embed_maps}
+                                onChange={(event) => setData("embed_maps", event.target.value)}
+                                placeholder='Masukkan Link Google Maps atau tag <iframe src="..."></iframe>'
+                            />
+                            {errors?.embed_maps && (
+                                <small className="text-xs text-danger-500 dark:text-danger-400 block mt-2">
+                                    {errors.embed_maps}
+                                </small>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -55,6 +55,9 @@ class GoogleController extends Controller
             Auth::login($user, true);
             request()->session()->regenerate();
 
+            $studioName = \App\Models\LandingPageSetting::first()?->studio_name ?? 'Studio';
+            request()->session()->flash('success', 'Otentikasi berhasil. Selamat datang di ' . $studioName);
+
             return redirect('/');
 
         } catch (\Exception $e) {

@@ -19,9 +19,20 @@ import Card from "@/Components/Landing/Card";
 import SectionTitle from "@/Components/Landing/SectionTitle";
 import Navbar from "@/Components/Landing/Navbar";
 import { getImageUrl } from "@/Utils/imageUrl";
+import { useEffect } from "react";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function Welcome() {
-    const { auth, trainers = [], membershipPlans = [], landingPageSetting = {} } = usePage().props;
+    const { auth, flash, trainers = [], membershipPlans = [], landingPageSetting = {} } = usePage().props;
+
+    useEffect(() => {
+        if (flash?.success) {
+            toast.success(flash.success);
+        }
+        if (flash?.error) {
+            toast.error(flash.error);
+        }
+    }, [flash]);
 
     const contactInfo = {
         instagramUrl: "https://www.instagram.com/orostudio.tegal/",
@@ -164,6 +175,7 @@ export default function Welcome() {
     return (
         <>
             <Head title="Pilates Studio | Move Better. Feel Stronger." />
+            <Toaster position="top-center" />
 
             <div className="min-h-screen bg-wellness-beige text-wellness-text">
                 {/* <div className="bg-primary-600 px-4 py-2 text-center text-xs font-medium text-white md:text-sm">

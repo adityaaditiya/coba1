@@ -906,8 +906,8 @@ useEffect(() => {
                 <Navbar navItems={navItems} currentKey={pageKey} />
 
                 <section className="mx-auto max-w-6xl px-4 py-12">
-                    <Link href={route("welcome")} className="mb-8 inline-flex items-center gap-2 text-sm text-primary-600">
-                        <IconArrowLeft size={16} /> Kembali ke Beranda
+                    <Link href={route("welcome")} className="relative z-10 mb-8 inline-flex items-center gap-2 text-sm text-primary-600 cursor-pointer">
+                        <IconArrowLeft size={16} /> Kembali ke Home
                     </Link>
                     {/* <div className="rounded-3xl border border-primary-100 bg-white p-8 shadow-sm">
                         <div className="flex flex-wrap items-start justify-between gap-4">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "@/Components/Dashboard/Sidebar";
 import Navbar from "@/Components/Dashboard/Navbar";
-import { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import { useTheme } from "@/Context/ThemeSwitcherContext";
 import { usePage } from "@inertiajs/react";
 import Swal from "sweetalert2";
@@ -19,6 +19,10 @@ export default function AppLayout({ children }) {
     }, [sidebarOpen]);
 
     useEffect(() => {
+        if (flash?.success) {
+            toast.success(flash.success);
+        }
+        
         if (flash?.error) {
             Swal.fire({
                 icon: "error",
@@ -28,7 +32,7 @@ export default function AppLayout({ children }) {
                 confirmButtonText: "Tutup",
             });
         }
-    }, [flash?.error]);
+    }, [flash]);
 
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 

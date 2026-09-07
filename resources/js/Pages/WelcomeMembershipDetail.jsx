@@ -6,6 +6,7 @@ import {
     IconCreditCard,
     IconSparkles,
     IconStar,
+    IconX,
 } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 
@@ -19,6 +20,7 @@ const formatRupiah = (value) =>
 export default function WelcomeMembershipDetail({ plan, paymentGateways = [] }) {
     const { auth } = usePage().props;
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [showClassesModal, setShowClassesModal] = useState(false);
     const { data, setData, post, processing } = useForm({
         payment_method: paymentGateways[0]?.value ?? "",
     });
@@ -87,14 +89,27 @@ export default function WelcomeMembershipDetail({ plan, paymentGateways = [] }) 
                                             <td className="bg-slate-50 px-4 py-3 font-medium text-slate-700">Pilihan Kelas</td>
                                             <td className="px-4 py-3 text-slate-700">
                                                 {allowedClasses.length ? (
-                                                    <ul className="space-y-2">
-                                                        {allowedClasses.map((item) => (
-                                                            <li key={item.id} className="flex items-start gap-2">
-                                                                <IconCheck size={16} className="mt-0.5 text-primary-600" />
-                                                                <span>{item.name}</span>
-                                                            </li>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {allowedClasses.slice(0, 3).map((item) => (
+                                                            <Link 
+                                                                key={item.id} 
+                                                                href={route('welcome.class-detail', item.id)}
+                                                                className="inline-flex items-center gap-1.5 bg-primary-50 px-3 py-1.5 text-xs font-medium text-primary-700 hover:bg-primary-100 transition-colors"
+                                                            >
+                                                                <IconCheck size={14} />
+                                                                {item.name}
+                                                            </Link>
                                                         ))}
-                                                    </ul>
+                                                        {allowedClasses.length > 3 && (
+                                                            <button 
+                                                                type="button" 
+                                                                onClick={() => setShowClassesModal(true)}
+                                                                className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-200 transition-colors"
+                                                            >
+                                                                +{allowedClasses.length - 3} Lainnya
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                 ) : (
                                                     <span>-</span>
                                                 )}
@@ -232,6 +247,37 @@ export default function WelcomeMembershipDetail({ plan, paymentGateways = [] }) 
                             >
                                 {processing ? "Memproses..." : "Konfirmasi Pembayaran"}
                             </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showClassesModal && (
+                <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-950/40 sm:p-4">
+                    <div className="absolute inset-0" onClick={() => setShowClassesModal(false)}></div>
+                    <div className="relative w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-3xl shadow-xl flex flex-col max-h-[85vh] animate-in slide-in-from-bottom-4 sm:slide-in-from-bottom-0 sm:fade-in duration-200">
+                        <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+                            <h3 className="text-lg font-bold text-slate-900">Daftar Pilihan Kelas</h3>
+                            <button onClick={() => setShowClassesModal(false)} className="p-1.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors">
+                                <IconX size={20} />
+                            </button>
+                        </div>
+                        <div className="p-5 overflow-y-auto">
+                            <ul className="space-y-3">
+                                {allowedClasses.map((item) => (
+                                    <li key={item.id}>
+                                        <Link 
+                                            href={route('welcome.class-detail', item.id)}
+                                            className="group flex items-center gap-3 rounded-xl border border-slate-100 p-3 shadow-sm hover:bg-slate-50 hover:border-primary-100 transition-colors"
+                                        >
+                                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-600">
+                                                <IconCheck size={16} />
+                                            </div>
+                                            <span className="font-medium text-slate-700 group-hover:text-primary-700 transition-colors">{item.name}</span>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
                 </div>

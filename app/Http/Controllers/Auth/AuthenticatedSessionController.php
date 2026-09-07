@@ -60,6 +60,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $studioName = \App\Models\LandingPageSetting::first()?->studio_name ?? 'Studio';
+        $request->session()->flash('success', 'Otentikasi berhasil. Selamat datang di ' . $studioName);
+
         // 🔽 redirect kamu (biarkan)
         if ($request->user()->hasRole('customer')) {
             return redirect()->intended(route('welcome', absolute: false));

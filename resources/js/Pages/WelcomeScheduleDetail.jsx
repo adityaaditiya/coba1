@@ -138,9 +138,20 @@ export default function WelcomeScheduleDetail({ schedule, requiredQuestionnaire 
                                     <p className="mt-1 text-sm text-wellness-muted">{schedule.trainer?.expertise}</p>
                                 </div>
                             </div>
+                            <div className="rounded-3xl border border-primary-100 bg-white p-6 shadow-sm">
+                                <h2 className="text-xl font-semibold">Ketentuan Pembatalan</h2>
+                                <div className="mt-4 rounded-2xl border border-slate-200 p-4">
+                                    <p className="text-sm text-wellness-muted whitespace-pre-line text-justify">
+                                        Demi kenyamanan bersama, kami sangat menghargai kerja sama Anda untuk tidak melakukan pembatalan mendadak.
+                                    </p>
+                                    <p className="mt-2 text-sm text-wellness-muted whitespace-pre-line text-justify">
+                                        Catatan: Pengembalian kredit/saldo hanya berlaku untuk pembatalan yang dilakukan maksimal 24 jam. Pembatalan setelah melewati batas waktu tersebut akan dianggap hangus.
+                                    </p>
+                                </div>
+                            </div>
                         </aside>
 
-                        <article className="overflow-hidden rounded-3xl border border-primary-100 bg-white shadow-sm">
+                        <article className="self-start overflow-hidden rounded-3xl border border-primary-100 bg-white shadow-sm">
                             <img
                                 src={imageUrl("classes", schedule.pilates_class?.image)}
                                 alt={schedule.pilates_class?.name}
@@ -148,7 +159,7 @@ export default function WelcomeScheduleDetail({ schedule, requiredQuestionnaire 
                             />
                             <div className="space-y-4 p-6 md:p-8">
                                 <h1 className="text-3xl font-bold">{schedule.pilates_class?.name}</h1>
-                                <p className="text-wellness-muted text-justify">{schedule.pilates_class?.about}</p>
+                                <p className="text-justify text-wellness-muted">{schedule.pilates_class?.about}</p>
                                 <button
                                     onClick={onConfirmBookingClick}
                                     className="w-full rounded-full bg-primary-600 py-4 text-center font-bold text-white transition hover:bg-primary-700"

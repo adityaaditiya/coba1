@@ -248,38 +248,38 @@ export default function Welcome() {
 
                 {/* Hapus px-4 dan md:px-6 di sini */}
                 <section className="py-10"> 
-                    <div className="relative h-[100vh] w-full">
-                            <SectionTitle
-                                eyebrow="Classes"
-                                title="Pilihan kelas sesuai ritme Anda"
-                                description="Mulai dari basic hingga sesi personal, semua kelas dipandu instruktur profesional bersertifikat."
-                            />
-                            <br />
-                        <div className="relative h-[100vh] w-full">
+                    <div className="w-full">
+                        <SectionTitle
+                            eyebrow="Classes"
+                            title="Pilihan kelas sesuai ritme Anda"
+                            description="Mulai dari basic hingga sesi personal, semua kelas dipandu instruktur profesional bersertifikat."
+                        />
+                        <br />
+                        {/* Tinggi disesuaikan: h-[520px] di mobile agar gambar tidak terpotong ekstrem, md:h-[80vh] / md:h-screen di desktop */}
+                        <div className="relative h-[520px] md:h-[80vh] lg:h-screen w-full overflow-hidden">
                             {/* Gambar Background */}
                             <img 
                                 src={classesBackgroundImage} 
                                 alt="Pilates class" 
-                                className="absolute inset-0 h-full w-full object-cover" 
+                                className="absolute inset-0 h-full w-full object-cover object-[70%_center] md:object-center" 
                             />
                         
-                            {/* Overlay Konten */}
-                            <div className="absolute inset-0 bg-black/30 flex flex-col justify-end p-6 md:p-16">
-                                
-                                {/* Container untuk teks agar tetap rapi di tengah/kiri sesuai layout website */}
-                                <div className="container mx-auto px-4 md:px-6">
+                            {/* Overlay Gradient: Lebih gelap di bawah agar teks terbaca jelas */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-16">
+                                <div className="container mx-auto px-2 md:px-6">
                                     <div className="max-w-xl text-left">
-                                        <h1 className="text-white text-xl md:text-4xl ">
+                                        <h1 className="text-white text-2xl md:text-4xl font-semibold leading-tight">
                                             Latihan Pilates yang Menenangkan
                                         </h1>
-                            
-                                        <div className="mt-6 flex flex-col md:flex-row gap-3">
-                                            <Button as={Link} href={route("welcome.page", "classes")}>Find Your Class</Button>
+                                        <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                                            <Button as={Link} href={route("welcome.page", "classes")}>
+                                                Find Your Class
+                                            </Button>
                                             <Link 
-                                            href={route("welcome.page", "appointment")} 
-                                            className="flex items-center justify-center inline-block border border-white text-white px-6 py-2 rounded-full text-sm hover:bg-gray-500"
+                                                href={route("welcome.page", "appointment")} 
+                                                className="flex items-center justify-center border border-white text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-white/20 transition text-center"
                                             >
-                                            Book An Appointment
+                                                Book An Appointment
                                             </Link>
                                         </div>
                                     </div>
@@ -310,48 +310,42 @@ export default function Welcome() {
                         </div>
                     </div>
                 </section> */}
-                <br />
-                <section className="py-20 mt-20">
-                    <div className="relative h-[100vh] w-full">
+                <section className="py-10 mt-10 md:mt-20">
+                    <div className="w-full">
                         <SectionTitle
                             eyebrow="Schedule"
                             title="Preview jadwal mingguan"
                             description="Atur waktu latihan Anda dengan jadwal yang fleksibel untuk pagi dan malam."
                         />
                         
-                {/* Hapus px-4 dan md:px-6 di sini */}
-                <section className="mt-18 bg-wellness-soft"> 
-                <div className="relative h-[100vh] w-full">
-                    {/* Gambar Background */}
-                    <img 
-                    src={scheduleBackgroundImage} 
-                    alt="Pilates class" 
-                    className="absolute inset-0 h-full w-full object-cover" 
-                    />
-                    
-                    {/* Overlay Konten */}
-                    <div className="absolute inset-0 bg-black/30 flex flex-col justify-end p-6 md:p-16">
-                    {/* Container untuk teks agar tetap rapi di tengah/kiri sesuai layout website */}
-                    <div className="container mx-auto px-4 md:px-6">
-                        <div className="max-w-xl text-left">
-                        <h1 className="text-white text-xl md:text-2xl ">
-                            Jadwal mingguan yang fleksibel Selaras dengan Agenda Personal Anda.
-                        </h1>
-                        
-                        <div className="mt-6 flex flex-col md:flex-row gap-3">
+                        <div className="mt-10 relative h-[480px] md:h-[75vh] lg:h-screen w-full overflow-hidden bg-wellness-soft"> 
+                            {/* Gambar Background */}
+                            <img 
+                                src={scheduleBackgroundImage} 
+                                alt="Pilates class schedule" 
+                                className="absolute inset-0 h-full w-full object-cover object-[65%_center] md:object-center" 
+                            />
                             
-                            <Link 
-                                href={route("welcome.page", "schedule")} 
-                                className="inline-block border border-white text-white px-6 py-2 rounded-full text-sm hover:bg-gray-500 text-center"
-                            >
-                                View More
-                            </Link>
+                            {/* Overlay Gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent flex flex-col justify-end p-6 md:p-16">
+                                <div className="container mx-auto px-2 md:px-6">
+                                    <div className="max-w-xl text-left">
+                                        <h1 className="text-white text-xl md:text-3xl font-semibold leading-snug">
+                                            Jadwal mingguan yang fleksibel Selaras dengan Agenda Personal Anda.
+                                        </h1>
+                                        
+                                        <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                                            <Link 
+                                                href={route("welcome.page", "schedule")} 
+                                                className="inline-block border border-white text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-white/20 transition text-center"
+                                            >
+                                                View More
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                </section>
                     </div>
                 </section>
 

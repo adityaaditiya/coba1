@@ -35,10 +35,10 @@ export default function Welcome() {
     }, [flash]);
 
     const contactInfo = {
-        instagramUrl: "https://www.instagram.com/orostudio.tegal/",
-        tiktokUrl: "https://www.tiktok.com/@oropilatesstudio",
-        whatsappUrl: "https://wa.me/628213003567",
-        mapsEmbedUrl: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d247.57918158921566!2d109.1340997!3d-6.8585801!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6fb7beb29c510d%3A0x668f24c80b9bc7fc!2sORO%20Pilates%20Studio!5e0!3m2!1sid!2ssg!4v1778299454810!5m2!1sid!2ssg",
+        instagramUrl: landingPageSetting?.instagram_url || "https://www.instagram.com/orostudio.tegal/",
+        tiktokUrl: landingPageSetting?.tiktok_url || "https://www.tiktok.com/@oropilatesstudio",
+        whatsappUrl: `https://wa.me/${landingPageSetting?.whatsapp_number || '628213003567'}`,
+        mapsEmbedUrl: landingPageSetting?.embed_maps || "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d247.57918158921566!2d109.1340997!3d-6.8585801!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6fb7beb29c510d%3A0x668f24c80b9bc7fc!2sORO%20Pilates%20Studio!5e0!3m2!1sid!2ssg!4v1778299454810!5m2!1sid!2ssg",
     };
 
     const trustBadges = ["Certified Trainers", "Small Group", "Beginner Friendly"];

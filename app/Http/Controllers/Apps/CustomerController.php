@@ -46,12 +46,32 @@ class CustomerController extends Controller
                         $userQuery->where('email', 'like', '%' . $search . '%');
                     });
             });
-        })->with('user:id,email')->latest()->paginate(8);
+        })->with(['user:id,email', 'user.roles:id,name'])->latest()->paginate(8);
 
         //return inertia
         return Inertia::render('Dashboard/Customers/Index', [
             'customers' => $customers,
         ]);
+    }
+
+    public function assignTrainer(Customer $customer)
+    {
+        if (!auth()->user()->can('trainers-create') && !auth()->user()->can('trainers-edit')) {
+            return back()->with('error', 'Menu tidak diizinkan. Anda tidak memiliki hak akses.');
+        }
+
+        $user = $customer->user;
+        if ($user) {
+            if ($user->hasRole('trainer')) {
+                $user->removeRole('trainer');
+                return back()->with('success', 'Berhasil mencabut hak akses Trainer dari ' . $customer->name);
+            } else {
+                $user->assignRole('trainer');
+                return back()->with('success', 'Berhasil memberikan hak akses Trainer kepada ' . $customer->name);
+            }
+        }
+
+        return back()->with('error', 'Pelanggan tidak memiliki akun (User ID kosong).');
     }
 
     /**

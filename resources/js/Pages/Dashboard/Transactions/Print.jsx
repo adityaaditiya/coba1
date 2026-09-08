@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import {
     IconArrowLeft,
     IconPrinter,
@@ -12,7 +12,12 @@ import ThermalReceipt, {
 } from "@/Components/Receipt/ThermalReceipt";
 
 export default function Print({ transaction }) {
+    const { landingPageSetting = {} } = usePage().props;
     const [printMode, setPrintMode] = useState("invoice"); // 'invoice' | 'thermal80' | 'thermal58'
+    
+    const studioName = "ORO Wellness & Movement";
+    const studioAddress = landingPageSetting?.address || "Jl. Layur no. 08, Kota Tegal";
+    const studioPhone = "082326923196";
 
     const formatPrice = (price = 0) =>
         Number(price || 0).toLocaleString("id-ID", {
@@ -80,8 +85,8 @@ export default function Print({ transaction }) {
         <>
             <Head title="Invoice Penjualan" />
 
-            <div className="min-h-screen bg-slate-100 dark:bg-slate-950 py-8 px-4 print:bg-white print:p-0">
-                <div className="max-w-4xl mx-auto space-y-6">
+            <div className="min-h-screen bg-slate-100 dark:bg-slate-950 py-8 px-4 print:bg-white print:p-0 print:min-h-0">
+                <div className="max-w-4xl mx-auto space-y-6 print:space-y-0">
                     {/* Action Bar */}
                     <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
                         <Link
@@ -170,15 +175,15 @@ export default function Print({ transaction }) {
                                 {printMode === "thermal80" ? (
                                     <ThermalReceipt
                                         transaction={transaction}
-                                        storeName="ORO Wellness & Movement"
-                                        storeAddress="Jl. Layur no. 08, Kota Tegal"
-                                        storePhone="08213003567"
+                                        storeName={studioName}
+                                        storeAddress={studioAddress}
+                                        storePhone={studioPhone}
                                     />
                                 ) : (
                                     <ThermalReceipt58mm
                                         transaction={transaction}
-                                        storeName="ORO Wellness & Movement"
-                                        storePhone="08213003567"
+                                        storeName={studioName}
+                                        storePhone={studioPhone}
                                     />
                                 )}
                             </div>
@@ -195,7 +200,7 @@ export default function Print({ transaction }) {
                                         <div className="flex items-center gap-2 mb-2">
                                             <IconReceipt size={24} />
                                             <span className="text-sm font-medium opacity-90 print:opacity-100">
-                                                INVOICE ORO Wellness & Movement
+                                                INVOICE {studioName}
                                             </span>
                                         </div>
                                         <p className="text-2xl font-bold">

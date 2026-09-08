@@ -8,8 +8,9 @@ export default function Print({ membership }) {
     const [printMode, setPrintMode] = useState("invoice");
     
     const studioLogoImage = getImageUrl(landingPageSetting?.studio_logo_image, "landing-page");
-    const studioAddress = landingPageSetting?.studio_address || "Jl. Layur No. 08, Tegalsari, Kec. Tegal Barat, Kota Tegal";
-    const studioPhone = landingPageSetting?.studio_phone || "08213003567";
+    const studioName = landingPageSetting?.studio_name || "ORO Pilates Studio";
+    const studioAddress = landingPageSetting?.address || "Jl. Layur No. 08, Tegalsari, Kec. Tegal Barat, Kota Tegal";
+    const studioPhone = landingPageSetting?.phone || "08213003567";
 
     const formatDateTime = (value) => value ? new Date(value).toLocaleString("id-ID", { 
         day: "2-digit", 
@@ -32,8 +33,8 @@ export default function Print({ membership }) {
         <>
             <Head title={`Print Membership ${membership.invoice}`} />
             
-            <div className="min-h-screen bg-slate-50 px-4 py-8 print:bg-white print:p-0 dark:bg-slate-950">
-                <div className="mx-auto max-w-4xl space-y-6">
+            <div className="min-h-screen bg-slate-50 px-4 py-8 print:bg-white print:p-0 print:min-h-0 dark:bg-slate-950">
+                <div className="mx-auto max-w-4xl space-y-6 print:space-y-0">
                     
                     {/* --- NAVIGATION & CONTROLS --- */}
                     <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
@@ -61,20 +62,20 @@ export default function Print({ membership }) {
                         <div className={isThermal ? "p-4" : "p-12 md:p-16"}>
                             
                             {/* HEADER SECTION */}
-                            <div className={`mb-8 border-b border-dashed border-slate-200 pb-6 text-center ${!isThermal ? 'md:flex md:justify-between md:text-left md:items-start md:border-solid border-slate-100' : ''}`}>
+                            <div className={`mb-8 border-b border-dashed border-slate-200 pb-6 text-center ${!isThermal ? 'md:flex md:justify-between md:text-left md:items-start md:border-solid border-slate-100 print:flex print:justify-between print:text-left print:items-start print:border-solid' : ''}`}>
                                 <div>
                                     {studioLogoImage && (
-                                        <div className={`flex mb-4 ${!isThermal ? 'justify-start' : 'justify-center'}`}>
+                                        <div className={`flex mb-4 ${!isThermal ? 'justify-center md:justify-start print:justify-start' : 'justify-center'}`}>
                                             <img src={studioLogoImage} alt="Logo" className="h-12 w-auto object-contain" />
                                         </div>
                                     )}
-                                    <h2 className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white">ORO STUDIO</h2>
+                                    <h2 className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white">{studioName}</h2>
                                     <p className="text-[10px] text-slate-500 leading-tight mt-1">{studioAddress}</p>
                                     <p className="text-[10px] text-slate-500 font-medium">Telp. {studioPhone}</p>
                                 </div>
                                 
                                 {!isThermal && (
-                                    <div className="text-right hidden md:block">
+                                    <div className="text-right hidden md:block print:block">
                                         <h1 className="text-4xl font-thin tracking-[0.2em] text-slate-200 uppercase mb-2 leading-none">INVOICE</h1>
                                         <p className="text-sm font-bold text-slate-800 tracking-tight">#{membership.invoice}</p>
                                     </div>
@@ -152,7 +153,7 @@ export default function Print({ membership }) {
                             {/* FOOTER - INVOICE ONLY */}
                             {!isThermal && (
                                 <div className="mt-20 text-center border-t border-slate-50 pt-10">
-                                     <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-slate-200">ORO WELLNESS & MOVEMENT</p>
+                                     <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-slate-200">{studioName}</p>
                                 </div>
                             )}
 

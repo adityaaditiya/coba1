@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DashboardLayout from "@/Layouts/DashboardLayout";
-import { Head, usePage, Link } from "@inertiajs/react";
+import { Head, usePage, Link, router } from "@inertiajs/react";
 import Button from "@/Components/Dashboard/Button";
 import {
     IconCirclePlus,
@@ -14,27 +14,69 @@ import {
     IconMapPin,
     IconMail,
     IconClipboardText,
+    IconUserStar,
 } from "@tabler/icons-react";
 import Search from "@/Components/Dashboard/Search";
 import Table from "@/Components/Dashboard/Table";
 import Pagination from "@/Components/Dashboard/Pagination";
+import Swal from "sweetalert2";
 
 // Customer Card for Grid View
 function CustomerCard({ customer }) {
+    const isTrainer = customer.user?.roles?.some(r => r.name === 'trainer');
+
+    const handleAssignTrainer = () => {
+        const actionTitle = isTrainer ? "Cabut Hak Akses?" : "Jadikan Trainer?";
+        const actionText = isTrainer 
+            ? `Cabut hak akses Trainer dari ${customer.name}?` 
+            : `Berikan hak akses Trainer kepada ${customer.name}?`;
+        const confirmText = isTrainer ? "Ya, Cabut!" : "Ya, Berikan!";
+        const confirmColor = isTrainer ? "#d33" : "#3085d6";
+
+        Swal.fire({
+            title: actionTitle,
+            text: actionText,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: confirmColor,
+            cancelButtonColor: isTrainer ? "#64748b" : "#d33",
+            confirmButtonText: confirmText,
+            cancelButtonText: "Batal",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                router.post(route("customers.assign-trainer", customer.id), {}, {
+                    preserveScroll: true,
+                });
+            }
+        });
+    };
+
     return (
         <div className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200 flex flex-col h-full">
             {/* Avatar & Name */}
-            <div className="flex items-center gap-3 mb-4">
-                <div className="flex items-center gap-3">
+            <div className="flex items-start justify-between gap-3 mb-4">
+                <div className="flex items-center gap-3 min-w-0">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
                         {customer.name.charAt(0).toUpperCase()}
                     </div>
-                    <div>
-                        <h3 className="text-base font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">
+                    <div className="truncate min-w-0">
+                        <h3 className="text-base font-semibold text-slate-800 dark:text-slate-200 truncate">
                             {customer.name}
                         </h3>
                     </div>
                 </div>
+                
+                <button
+                    onClick={handleAssignTrainer}
+                    title={isTrainer ? "Cabut hak akses Trainer" : "Jadikan Trainer"}
+                    className={`p-1.5 rounded-full flex-shrink-0 transition-colors ${
+                        isTrainer
+                            ? "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400 hover:bg-danger-100 hover:text-danger-600 dark:hover:bg-danger-900/30 dark:hover:text-danger-400"
+                            : "border border-slate-200 text-slate-400 hover:border-amber-200 hover:bg-amber-50 hover:text-amber-500 dark:border-slate-700 dark:hover:border-amber-800 dark:hover:bg-amber-900/20"
+                    }`}
+                >
+                    <IconUserStar size={18} />
+                </button>
             </div>
 
             {/* Contact Info */}

@@ -33,8 +33,7 @@ class TrainerController extends Controller
                     });
                 })
                 ->latest()
-                ->paginate(10)
-                ->withQueryString(),
+                ->paginate(10)->withQueryString(),
         ]);
     }
 

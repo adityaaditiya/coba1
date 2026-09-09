@@ -14,7 +14,7 @@ class ClassCategoryController extends Controller
     {
         $classCategories = ClassCategory::when(request()->search, function ($query) {
             $query->where('name', 'like', '%' . request()->search . '%');
-        })->latest()->paginate(10);
+        })->latest()->paginate(10)->withQueryString();
 
         return Inertia::render('Dashboard/ClassCategories/Index', [
             'classCategories' => $classCategories,

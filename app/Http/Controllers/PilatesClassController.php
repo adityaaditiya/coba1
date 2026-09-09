@@ -29,7 +29,7 @@ class PilatesClassController extends Controller
                     });
                 })
                 ->latest()
-                ->paginate(10),
+                ->paginate(10)->withQueryString(),
         ]);
     }
 

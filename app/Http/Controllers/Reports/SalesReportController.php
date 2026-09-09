@@ -42,8 +42,7 @@ class SalesReportController extends Controller
         )->orderByDesc('created_at');
 
         $transactions = (clone $baseListQuery)
-            ->paginate(10)
-            ->withQueryString();
+            ->paginate(10)->withQueryString();
 
         $aggregateQuery = $this->applyFilters(Transaction::query()->notCanceled(), $filters);
 

@@ -22,8 +22,7 @@ class UserController extends Controller
             ->when(request()->search, fn($query) => $query->where('name', 'like', '%' . request()->search . '%'))
             ->select('id', 'name', 'avatar', 'email')
             ->latest()
-            ->paginate(7)
-            ->withQueryString();
+            ->paginate(7)->withQueryString();
 
         // render view
         return Inertia::render('Dashboard/Users/Index', [

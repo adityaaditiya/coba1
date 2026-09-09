@@ -39,7 +39,7 @@ class StudioPageController extends Controller
                     $subQuery->where('name', 'like', '%' . request()->search . '%')
                         ->orWhere('title', 'like', '%' . request()->search . '%');
                 });
-            })->orderBy('id')->paginate(10),
+            })->orderBy('id')->paginate(10)->withQueryString(),
         ]);
     }
 

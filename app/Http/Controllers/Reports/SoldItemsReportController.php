@@ -44,8 +44,7 @@ class SoldItemsReportController extends Controller
         $soldItems = (clone $baseQuery)
             ->orderByRaw('(SELECT created_at FROM transactions WHERE transactions.id = transaction_details.transaction_id) desc')
             ->orderByDesc('transaction_details.id')
-            ->paginate(10)
-            ->withQueryString();
+            ->paginate(10)->withQueryString();
 
         $totals = (clone $baseQuery)
     ->selectRaw('

@@ -112,18 +112,6 @@ export default function Welcome() {
         { day: "Sabtu", morning: "09:00 Signature Class", evening: "16:30 Recovery" },
     ];
     const testimonials = [
-        // {
-        //     quote: "Studio-nya tenang dan instruktur sangat detail. Postur saya jauh membaik dalam 6 minggu.",
-        //     name: "Cecilia, 32",
-        // },
-        // {
-        //     quote: "Saya pemula total, tapi kelasnya ramah dan progresnya terasa konsisten setiap minggu.",
-        //     name: "Vina, 28",
-        // },
-        // {
-        //     quote: "Program private session membantu recovery punggung saya lebih cepat dan aman.",
-        //     name: "Monica, 37",
-        // },
         {
             quote: "Suasana studionya begitu tenang dan estetik. Arahan instruktur yang sangat personal membuat sesi pertama saya terasa begitu berkesan.",
             name: "Denia, 32",
@@ -178,51 +166,44 @@ export default function Welcome() {
             <Toaster position="top-center" />
 
             <div className="min-h-screen bg-wellness-beige text-wellness-text">
-                {/* <div className="bg-primary-600 px-4 py-2 text-center text-xs font-medium text-white md:text-sm">
-                    Get discount 20% Off Private Class — Reservasi sekarang.
-                </div> */}
 
                 <Navbar navItems={navItems} currentKey="home" />
 
                 <section className="bg-gradient-to-br from-wellness-beige via-wellness-soft to-wellness-greige px-4 pb-20 pt-11 md:px-6 md:pt-18">
-                {/* Menggunakan 'flex flex-col-reverse' agar pada mobile kolom kedua (gambar) naik ke atas, 
-                    lalu 'lg:grid' untuk mengembalikan tampilan kolom di layar besar */}
                 <div className="mx-auto flex flex-col-reverse lg:grid max-w-7xl items-center gap-12 lg:grid-cols-2">
         
-        {/* KOLOM TEKS */}
-        <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary-600">Premium Pilates Studio</p>
-            <h1 className="mt-2 font-serif text-5xl font-medium leading-tight text-gray-800 md:text-7xl">
-                Move Better. <span className="text-amber-800 font-serif">Feel Stronger.</span>
-            </h1>            
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-wellness-muted md:text-lg">
-                Tingkatkan postur, kekuatan core, dan mobilitas melalui kelas pilates yang personal, elegan, dan menenangkan.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-                <Button as={Link} href={route("welcome.page", "classes")}>Book A Class</Button>
-                <Button as={Link} href={route("welcome.page", "pricing")} variant="secondary">Join Membership</Button>
-            </div>
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary-600">Premium Pilates Studio</p>
+                        <h1 className="mt-2 font-serif text-5xl font-medium leading-tight text-gray-800 md:text-7xl">
+                            Move Better. <span className="text-amber-800 font-serif">Feel Stronger.</span>
+                        </h1>            
+                        <p className="mt-4 max-w-xl text-base leading-relaxed text-wellness-muted md:text-lg">
+                            Tingkatkan postur, kekuatan core, dan mobilitas melalui kelas pilates yang personal, elegan, dan menenangkan.
+                        </p>
+                        <div className="mt-10 flex flex-wrap gap-4">
+                            <Button as={Link} href={route("welcome.page", "classes")}>Book A Class</Button>
+                            <Button as={Link} href={route("welcome.page", "pricing")} variant="secondary">Join Membership</Button>
+                        </div>
 
-            <div className="mt-10 flex flex-wrap gap-3">
-                {trustBadges.map((badge) => (
-                    <span key={badge} className="inline-flex items-center gap-2 rounded-full border border-primary-200 bg-white/80 px-4 py-2 text-sm text-wellness-muted">
-                        <IconCheck size={14} className="text-primary-600" />
-                        {badge}
-                    </span>
-                ))}
-            </div>
-        </div>
+                        <div className="mt-10 flex flex-wrap gap-3">
+                            {trustBadges.map((badge) => (
+                                <span key={badge} className="inline-flex items-center gap-2 rounded-full border border-primary-200 bg-white/80 px-4 py-2 text-sm text-wellness-muted">
+                                    <IconCheck size={14} className="text-primary-600" />
+                                    {badge}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
 
-        {/* KOLOM GAMBAR (Sekarang muncul di atas pada Mobile) */}
-        <div className="w-full overflow-hidden backdrop-blur-sm">
-            <img
-                src={heroBackgroundImage}
-                alt={(landingPageSetting?.studio_name || "ORO Pilates Studio") + " Building"}
-                className="h-auto w-full rounded-[24px] object-cover"
-            />
-        </div>
-    </div>
-</section>
+                    <div className="w-full overflow-hidden backdrop-blur-sm">
+                        <img
+                            src={heroBackgroundImage}
+                            alt={(landingPageSetting?.studio_name || "ORO Pilates Studio") + " Building"}
+                            className="h-auto w-full rounded-[24px] object-cover"
+                        />
+                    </div>
+                </div>
+                </section>
 
                 <section className="px-4 py-20 md:px-6">
                     <div className="mx-auto max-w-7xl">
@@ -233,8 +214,8 @@ export default function Welcome() {
                         />
                         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                             {benefits.map(({ icon: Icon, title, desc }) => (
-                                <Card key={title}>
-                                    <div className="mb-5 inline-flex rounded-2xl bg-primary-100 p-3 text-primary-600">
+                                <Card key={title} className="group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-primary-100">
+                                    <div className="mb-5 inline-flex rounded-2xl bg-primary-100 p-3 text-primary-600 transition-transform duration-500 group-hover:scale-110">
                                         <Icon size={22} />
                                     </div>
                                     <h3 className="text-lg font-semibold">{title}</h3>
@@ -245,8 +226,6 @@ export default function Welcome() {
                     </div>
                 </section>
 
-
-                {/* Hapus px-4 dan md:px-6 di sini */}
                 <section className="py-10"> 
                     <div className="w-full">
                         <SectionTitle
@@ -255,16 +234,13 @@ export default function Welcome() {
                             description="Mulai dari basic hingga sesi personal, semua kelas dipandu instruktur profesional bersertifikat."
                         />
                         <br />
-                        {/* Tinggi disesuaikan: h-[520px] di mobile agar gambar tidak terpotong ekstrem, md:h-[80vh] / md:h-screen di desktop */}
                         <div className="relative h-[520px] md:h-[80vh] lg:h-screen w-full overflow-hidden">
-                            {/* Gambar Background */}
                             <img 
                                 src={classesBackgroundImage} 
                                 alt="Pilates class" 
                                 className="absolute inset-0 h-full w-full object-cover object-[70%_center] md:object-center" 
                             />
                         
-                            {/* Overlay Gradient: Lebih gelap di bawah agar teks terbaca jelas */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-16">
                                 <div className="container mx-auto px-2 md:px-6">
                                     <div className="max-w-xl text-left">
@@ -289,27 +265,6 @@ export default function Welcome() {
                     </div>
                 </section>
 
-                {/* <section className="bg-wellness-soft px-4 py-20 md:px-6">
-                    <div className="mx-auto max-w-7xl">
-                        <SectionTitle
-                            eyebrow="Classes"
-                            title="Pilihan kelas sesuai ritme Anda"
-                            description="Mulai dari basic hingga sesi personal, semua kelas dipandu instruktur profesional bersertifikat."
-                        />
-                        <div className="mt-12 grid gap-6 md:grid-cols-2">
-                            {classTypes.map((item) => (
-                                <Card key={item.title}>
-                                    <h3 className="text-xl font-semibold">{item.title}</h3>
-                                    <p className="mt-3 text-sm text-wellness-muted">{item.desc}</p>
-                                    <div className="mt-6 flex flex-wrap gap-3 text-xs text-wellness-muted">
-                                        <span className="rounded-full bg-primary-50 px-3 py-1.5">Durasi: {item.duration}</span>
-                                        <span className="rounded-full bg-primary-50 px-3 py-1.5">Level: {item.level}</span>
-                                    </div>
-                                </Card>
-                            ))}
-                        </div>
-                    </div>
-                </section> */}
                 <section className="py-10 mt-10 md:mt-20">
                     <div className="w-full">
                         <SectionTitle
@@ -319,14 +274,12 @@ export default function Welcome() {
                         />
                         
                         <div className="mt-10 relative h-[480px] md:h-[75vh] lg:h-screen w-full overflow-hidden bg-wellness-soft"> 
-                            {/* Gambar Background */}
                             <img 
                                 src={scheduleBackgroundImage} 
                                 alt="Pilates class schedule" 
                                 className="absolute inset-0 h-full w-full object-cover object-[65%_center] md:object-center" 
                             />
                             
-                            {/* Overlay Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent flex flex-col justify-end p-6 md:p-16">
                                 <div className="container mx-auto px-2 md:px-6">
                                     <div className="max-w-xl text-left">
@@ -349,29 +302,6 @@ export default function Welcome() {
                     </div>
                 </section>
 
-                            {/* <Card className="mt-10 p-0 overflow-hidden">
-                            <div className="overflow-x-auto">
-                                <table className="min-w-full text-left text-sm">
-                                    <thead className="bg-primary-50 text-wellness-text">
-                                        <tr>
-                                            <th className="px-6 py-4 font-semibold">Hari</th>
-                                            <th className="px-6 py-4 font-semibold">Pagi</th>
-                                            <th className="px-6 py-4 font-semibold">Sore / Malam</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {scheduleRows.map((row) => (
-                                            <tr key={row.day} className="border-t border-primary-100 text-wellness-muted">
-                                                <td className="px-6 py-4 font-medium text-wellness-text">{row.day}</td>
-                                                <td className="px-6 py-4">{row.morning}</td>
-                                                <td className="px-6 py-4">{row.evening}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </Card> */} 
-
                 <section className="mt-18 bg-wellness-soft px-4 py-20 md:px-6">
                     <div className="mx-auto max-w-7xl">
                         <SectionTitle
@@ -386,13 +316,12 @@ export default function Welcome() {
                                 return (
                                 <Card
                                     key={item.id}
-                                    className={`flex flex-col h-full ${
+                                    className={`group flex flex-col h-full overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
                                         isMostPopular 
                                         ? "border-2 border-primary-600 ring-2 ring-primary-500/20" 
-                                        : "border border-primary-100"
+                                        : "border border-primary-100 hover:border-primary-300"
                                     }`}
                                 >
-                                    {/* Konten Atas */}
                                     <div>
                                         {item.tag && (
                                             <span className="inline-block rounded-full bg-primary-500 px-3 py-1 text-xs font-semibold text-white">
@@ -400,25 +329,21 @@ export default function Welcome() {
                                             </span>
                                         )}
                                         
-                                        {/* TAMBAHKAN min-h DI SINI (Contoh: min-h-[56px] untuk 2 baris teks) */}
                                         <div className="min-h-[60px] flex items-center">
                                             <h3 className="mt-2 text-xl font-semibold leading-tight">{item.name}</h3>
                                         </div>
 
-                                        {/* Harga sekarang akan selalu sejajar karena judul di atasnya punya tinggi tetap */}
                                         <p className="mt-1 text-3xl font-semibold text-primary-600">
                                             {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(Number(item.price || 0))}
                                         </p>
                                     </div>
 
-                                    {/* Area Tengah (Deskripsi) */}
                                     <div className="flex-1 mt-2">
                                         <p className="text-sm text-wellness-muted whitespace-pre-line">
                                             {item.description || "Benefit membership akan tampil di sini."}
                                         </p>
                                     </div>
 
-                                    {/* Tombol */}
                                     <div className="mt-3">
                                         <Button
                                             as={Link}
@@ -447,20 +372,26 @@ export default function Welcome() {
                             title="Dipandu instruktur berpengalaman"
                             description="Tim kami menghadirkan pendekatan personal agar setiap gerakan terasa aman, efektif, dan menyenangkan."
                         />
-                        <div className="mt-12 grid gap-6 md:grid-cols-4">
+                        
+                        <div className="mt-12 flex flex-wrap justify-center gap-6">
                             {trainers.map((trainer) => (
-                                <Card key={trainer.name} className="text-center">
-                                    <img
-                                        src={trainer.photo ? `/storage/customers/${trainer.photo}` : "https://images.unsplash.com/photo-1595079835353-fb3cf0f83f20?auto=format&fit=crop&w=500&q=80"}
-                                        alt={trainer.name}
-                                        className="mx-auto h-64 w-full rounded-2xl object-cover"
-                                        onError={(e) => {
-                                        // Mencegah looping tak terbatas jika gambar placeholder juga rusak
-                                        e.target.onerror = null; 
-                                        // Ganti dengan URL gambar cadanganmu
-                                        e.target.src = "https://ui-avatars.com/api/?name=" + trainer.name;
-                                    }}
-                                    />
+                                <Card 
+                                    key={trainer.name} 
+                                    className="group w-full sm:w-72 md:w-94 text-center overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-primary-100"
+                                >
+                                    <div className="relative overflow-hidden rounded-2xl">
+                                        <img
+                                            src={trainer.photo ? `/storage/customers/${trainer.photo}` : "https://images.unsplash.com/photo-1595079835353-fb3cf0f83f20?auto=format&fit=crop&w=500&q=80"}
+                                            alt={trainer.name}
+                                            className="mx-auto h-64 w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            onError={(e) => {
+                                                e.target.onerror = null; 
+                                                e.target.src = "https://ui-avatars.com/api/?name=" + trainer.name;
+                                            }}
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent mix-blend-multiply pointer-events-none" />
+                                    </div>
+
                                     <h3 className="mt-5 text-xl font-semibold">{trainer.name}</h3>
                                     <p className="mt-2 text-sm text-wellness-muted">{trainer.expertise || "Spesialisasi trainer belum diisi."}</p>
                                 </Card>
@@ -478,18 +409,15 @@ export default function Welcome() {
                         />
                         <div className="mt-12 grid gap-6 md:grid-cols-3">
                             {testimonials.map((item) => (
-                                <Card key={item.name} className="flex flex-col h-full p-8 transition-all duration-300 hover:shadow-lg">
-                                    {/* Bagian Quote */}
+                                <Card key={item.name} className="group flex flex-col h-full p-8 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-primary-100">
                                     <div className="flex-grow">
-                                        <p className="italic text-base leading-relaxed text-wellness-muted">
+                                        <p className="italic text-base leading-relaxed text-wellness-muted transition-colors duration-300 group-hover:text-gray-700">
                                             “{item.quote}”
                                         </p>
                                     </div>
 
-                                    {/* Bagian Nama - mt-auto akan memaksa elemen ini ke paling bawah */}
                                     <div className="mt-8">
                                         <p className="font-bold text-gray-900">{item.name}</p>
-                                        {/* <p className="text-xs text-wellness-primary/60 uppercase tracking-wider">Member</p> */}
                                     </div>
                                 </Card>
                             ))}
@@ -551,12 +479,6 @@ export default function Welcome() {
                                 <a href={contactInfo.tiktokUrl} className="rounded-xl border border-primary-400 p-2 hover:bg-primary-500">
                                     <IconBrandTiktok size={18} />
                                 </a>
-                                {/* <a href="#" className="rounded-xl border border-primary-400 p-2 hover:bg-primary-500">
-                                    <IconAward size={18} />
-                                </a>
-                                <a href="#" className="rounded-xl border border-primary-400 p-2 hover:bg-primary-500">
-                                    <IconHeartHandshake size={18} />
-                                </a> */}
                             </div>
                             <Button as={Link} href={route("welcome.page", "classes")} className="mt-6 w-full bg-primary-500 text-white hover:bg-primary-700">
                                 Book A Class

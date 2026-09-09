@@ -34,8 +34,7 @@ class StudioTransactionReportController extends Controller
 
         $bookings = (clone $baseQuery)
             ->latest('booked_at')
-            ->paginate(10)
-            ->withQueryString()
+            ->paginate(10)->withQueryString()
             ->through(fn (PilatesBooking $booking) => [
                 'id' => $booking->id,
                 'created_at' => $booking->booked_at?->timezone('Asia/Jakarta')->format('d M Y, H:i') ?? '-',
@@ -86,8 +85,7 @@ class StudioTransactionReportController extends Controller
 
         $appointments = (clone $baseQuery)
             ->latest('booked_at')
-            ->paginate(10)
-            ->withQueryString()
+            ->paginate(10)->withQueryString()
             ->through(fn (AppointmentBooking $booking) => [
                 'id' => $booking->id,
                 'created_at' => $booking->booked_at?->timezone('Asia/Jakarta')->format('d M Y, H:i') ?? '-',
@@ -138,8 +136,7 @@ class StudioTransactionReportController extends Controller
 
         $memberships = (clone $baseQuery)
             ->latest('created_at')
-            ->paginate(10)
-            ->withQueryString()
+            ->paginate(10)->withQueryString()
             ->through(fn (UserMembership $membership) => [
                 'id' => $membership->id,
                 'created_at' => $membership->created_at?->timezone('Asia/Jakarta')->format('d M Y, H:i') ?? '-',
@@ -186,8 +183,7 @@ class StudioTransactionReportController extends Controller
 
         $rows = (clone $baseQuery)
             ->latest('created_at')
-            ->paginate(10)
-            ->withQueryString()
+            ->paginate(10)->withQueryString()
             ->through(fn (MembershipExtension $extension) => [
                 'id' => $extension->id,
                 'created_at' => $extension->created_at?->timezone('Asia/Jakarta')->format('d M Y, H:i') ?? '-',
@@ -282,8 +278,7 @@ class StudioTransactionReportController extends Controller
         ])
         // ... sisa kode code paginate dan return Inertia sama seperti sebelumnya
             ->orderByDesc('mct.created_at')
-            ->paginate(10)
-            ->withQueryString()
+            ->paginate(10)->withQueryString()
             ->through(fn ($item) => [
                 'id' => $item->id,
                 'created_at' => $item->created_at ? Carbon::parse($item->created_at)->timezone('Asia/Jakarta')->format('d M Y, H:i') : '-',
@@ -349,8 +344,7 @@ class StudioTransactionReportController extends Controller
 
         $memberships = (clone $baseQuery)
             ->orderBy('expires_at')
-            ->paginate(10)
-            ->withQueryString()
+            ->paginate(10)->withQueryString()
             ->through(fn (UserMembership $membership) => [
                 'id' => $membership->id,
                 'customer_name' => $membership->user?->name ?? '-',

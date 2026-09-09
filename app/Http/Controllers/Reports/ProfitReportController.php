@@ -42,8 +42,7 @@ class ProfitReportController extends Controller
         )->orderByDesc('created_at');
 
         $transactions = (clone $baseQuery)
-            ->paginate(10)
-            ->withQueryString();
+            ->paginate(10)->withQueryString();
 
         $transactionIds = (clone $baseQuery)->pluck('id');
 

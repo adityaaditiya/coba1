@@ -54,8 +54,7 @@ class PilatesBookingHistoryController extends Controller
         }
 
         $bookings = $query
-            ->paginate(10)
-            ->withQueryString();
+            ->paginate(10)->withQueryString();
 
         $bookingCollection = $bookings->getCollection();
         $bookingIds = $bookingCollection->pluck('id')->all();

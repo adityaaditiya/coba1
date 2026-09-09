@@ -20,8 +20,7 @@ class AppointmentSessionController extends Controller
                     ->orWhere('description', 'like', "%{$search}%");
             })
             ->orderBy('id', 'asc')
-            ->paginate(10)
-            ->withQueryString();
+            ->paginate(10)->withQueryString();
 
         return Inertia::render('Dashboard/AppointmentSessions/Index', [
             'appointmentSessions' => $appointmentSessions,

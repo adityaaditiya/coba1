@@ -17,8 +17,7 @@ class PermissionController extends Controller
             ->when(request()->search, fn($query) => $query->where('name', 'like', '%' . request()->search . '%'))
             ->select('id', 'name')
             ->latest()
-            ->paginate(12)
-            ->withQueryString();
+            ->paginate(12)->withQueryString();
 
         // render view
         return Inertia::render('Dashboard/Permissions/Index', [

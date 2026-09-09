@@ -13,7 +13,7 @@ class QuestionController extends Controller
     {
         $questions = Question::when(request()->search, function ($query) {
             $query->where('question_text', 'like', '%' . request()->search . '%');
-        })->latest()->paginate(10);
+        })->latest()->paginate(10)->withQueryString();
 
         return Inertia::render('Dashboard/Questionnaires/Questions/Index', [
             'questions' => $questions,

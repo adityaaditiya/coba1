@@ -29,8 +29,7 @@ class MembershipPlanController extends Controller
                 ->orderByDesc('is_active')
                 ->orderBy('order_position')
                 ->latest('id')
-                ->paginate(10)
-                ->withQueryString(), // <-- Menjaga parameter ?search tetap ada di link pagination
+                ->paginate(10)->withQueryString(), // <-- Menjaga parameter ?search tetap ada di link pagination
         ]);
     }
 

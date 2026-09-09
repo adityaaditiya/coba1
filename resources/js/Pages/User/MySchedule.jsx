@@ -202,7 +202,7 @@ export default function MySchedule({ bookings = [], filters = {} }) {
                                                         <IconUser size={16} />
                                                         Trainer: {schedule.trainer_name || "-"}
                                                     </p>
-                                                    <p>Participants: {booking.participants || 0}</p>
+                                                    <p>Participants: {schedule.booked_slots || 0}</p>
                                                     <p>Payment: {booking.payment_type || "-"}</p>
                                                     <p>Booked at: {formatDate(booking.booked_at)}</p>
                                                 </div>

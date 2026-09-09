@@ -21,6 +21,11 @@ class UserScheduleController extends Controller
 
         $bookings = PilatesBooking::query()
             ->with([
+                'timetable' => function ($query) {
+                    $query->withSum(['bookings as booked_slots' => function ($q) {
+                        $q->where('status', 'confirmed');
+                    }], 'participants');
+                },
                 'timetable.pilatesClass:id,name,image,difficulty_level,duration,equipment',
                 'timetable.trainer:id,user_id',
             ])
@@ -46,6 +51,7 @@ class UserScheduleController extends Controller
                         'id' => $booking->timetable?->id,
                         'start_at' => optional($booking->timetable?->start_at)->toISOString(),
                         'duration_minutes' => $booking->timetable?->duration_minutes,
+                        'booked_slots' => (int) $booking->timetable?->booked_slots,
                         'trainer_name' => $booking->timetable?->trainer?->name,
                         'class' => [
                             'name' => $booking->timetable?->pilatesClass?->name,

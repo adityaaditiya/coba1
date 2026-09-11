@@ -49,7 +49,7 @@ class RoleController extends Controller
         $role->givePermissionTo($request->selectedPermission);
 
         // render view
-        return back();
+        return back()->with('success', 'Data berhasil disimpan.');
     }
 
     /**
@@ -64,7 +64,7 @@ class RoleController extends Controller
         $role->syncPermissions($request->selectedPermission);
 
         // render view
-        return back();
+        return back()->with('success', 'Data berhasil disimpan.');
     }
 
     /**
@@ -76,6 +76,6 @@ class RoleController extends Controller
         $role->delete();
 
         // render view
-        return back();
+        return back()->with('success', 'Data berhasil disimpan.');
     }
 }

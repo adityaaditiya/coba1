@@ -59,7 +59,7 @@ class StudioPageController extends Controller
 
         StudioPage::create($request->only(['name', 'key', 'title', 'content']));
 
-        return to_route('studio-pages.index');
+        return to_route('studio-pages.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function edit(StudioPage $studioPage): Response
@@ -80,14 +80,14 @@ class StudioPageController extends Controller
 
         $studioPage->update($request->only(['name', 'key', 'title', 'content']));
 
-        return to_route('studio-pages.index');
+        return to_route('studio-pages.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function destroy(StudioPage $studioPage): RedirectResponse
     {
         $studioPage->delete();
 
-        return to_route('studio-pages.index');
+        return to_route('studio-pages.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function showByKey(string $key): Response
@@ -441,7 +441,7 @@ class StudioPageController extends Controller
             return to_route('welcome.appointment-payment.drop-in-checkout', [
                 'appointment' => $appointment->id,
                 'booking_id' => $booking->id,
-            ]);
+            ])->with('success', 'Data berhasil disimpan.');
         }
 
         return back()->with('success', 'Booking appointment berhasil disimpan.');
@@ -455,7 +455,7 @@ class StudioPageController extends Controller
             ->first();
 
         if (! $customer) {
-            return to_route('welcome.page', 'appointment');
+            return to_route('welcome.page', 'appointment')->with('success', 'Data berhasil disimpan.');
         }
 
         $bookingId = (int) $request->integer('booking_id');
@@ -491,7 +491,7 @@ class StudioPageController extends Controller
         $selectedGateway = $paymentGateways->firstWhere('value', $booking?->payment_method);
 
         if (! $booking || ! $selectedGateway) {
-            return to_route('welcome.page', 'appointment');
+            return to_route('welcome.page', 'appointment')->with('success', 'Data berhasil disimpan.');
         }
 
         $appointment->loadMissing(['pilatesClass:id,name,image']);
@@ -710,7 +710,7 @@ class StudioPageController extends Controller
         $selectedGateway = $paymentGateways->firstWhere('value', $membership?->payment_method);
 
         if (! $membership || ! $selectedGateway) {
-            return to_route('welcome.membership-detail', $membershipPlan->id);
+            return to_route('welcome.membership-detail', $membershipPlan->id)->with('success', 'Data berhasil disimpan.');
         }
 
         return Inertia::render('WelcomeMembershipCheckout', [
@@ -869,7 +869,7 @@ class StudioPageController extends Controller
         $checkoutRemainingSlots = $remainingSlots + (int) ($booking?->participants ?? 0);
 
         if (! $schedule->allow_drop_in || ! $booking || ! $selectedGateway || $checkoutRemainingSlots < 1) {
-            return to_route('welcome.schedule-payment', $schedule->id);
+            return to_route('welcome.schedule-payment', $schedule->id)->with('success', 'Data berhasil disimpan.');
         }
 
         return Inertia::render('WelcomeScheduleDropInCheckout', [
@@ -1037,7 +1037,7 @@ class StudioPageController extends Controller
             return to_route('welcome.schedule-payment.drop-in-checkout', [
                 'pilatesTimetable' => $timetable->id,
                 'booking_id' => $booking->id,
-            ]);
+            ])->with('success', 'Data berhasil disimpan.');
         }
 
         return back()->with('success', 'Transaksi selesai. Booking berhasil dibuat.');

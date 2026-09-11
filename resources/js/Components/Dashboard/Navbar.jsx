@@ -4,9 +4,10 @@ import { IconMenu2, IconMoon, IconSun, IconSearch } from "@tabler/icons-react";
 import AuthDropdown from "@/Components/Dashboard/AuthDropdown";
 import { Menu } from "@/Utils/Menu";
 import Notification from "@/Components/Dashboard/Notification";
+import { getImageUrl } from "@/Utils/imageUrl";
 
 export default function Navbar({ toggleSidebar, themeSwitcher, darkMode }) {
-    const { auth } = usePage().props;
+    const { auth, landingPageSetting } = usePage().props;
     const menuNavigation = Menu();
 
     // Get current page title
@@ -36,6 +37,9 @@ export default function Navbar({ toggleSidebar, themeSwitcher, darkMode }) {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    const studioLogoImage = getImageUrl(landingPageSetting?.studio_logo_image, "landing-page");
+
+
     return (
         <header
             className="sticky top-0 z-30 h-16 flex items-center justify-between px-4 md:px-6
@@ -56,11 +60,15 @@ export default function Navbar({ toggleSidebar, themeSwitcher, darkMode }) {
 
                 {/* Mobile Logo */}
                 <div className="md:hidden flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
-                        <span className="text-white font-bold text-xs">O</span>
-                    </div>
+                    {studioLogoImage ? (
+                        <img src={studioLogoImage} alt="Logo" className="w-7 h-7 rounded-full object-cover" />
+                    ) : (
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
+                            <span className="text-white font-bold text-xs">O</span>
+                        </div>
+                    )}
                     <span className="text-lg font-bold text-slate-800 dark:text-white">
-                        {usePage().props.landingPageSetting?.studio_name || "ORO Pilates Studio"}
+                        {landingPageSetting?.studio_name || "ORO Pilates Studio"}
                     </span>
                 </div>
 

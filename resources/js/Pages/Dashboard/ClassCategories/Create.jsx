@@ -33,8 +33,7 @@ export default function Create() {
     const submit = (e) => {
         e.preventDefault();
         post(route("class-categories.store"), {
-            onSuccess: () => toast.success("Kategori Kelas berhasil ditambahkan"),
-            onError: () => toast.error("Gagal menyimpan kategori kelas"),
+onError: () => toast.error("Gagal menyimpan kategori kelas"),
         });
     };
 

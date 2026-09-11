@@ -46,8 +46,7 @@ export default function Edit({ category }) {
     const submit = (e) => {
         e.preventDefault();
         post(route("categories.update", category.id), {
-            onSuccess: () => toast.success("Kategori berhasil diperbarui"),
-            onError: () => toast.error("Gagal memperbarui kategori"),
+onError: () => toast.error("Gagal memperbarui kategori"),
         });
     };
 

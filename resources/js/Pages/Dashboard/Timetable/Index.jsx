@@ -19,12 +19,7 @@ export default function Index({ sessions = [], selectedStartDate, selectedEndDat
     const [selectedSession, setSelectedSession] = useState(null);
     const [participantSession, setParticipantSession] = useState(null);
 
-    React.useEffect(() => {
-        if (flash?.success) {
-            toast.success(flash.success);
-        }
-    }, [flash]);
-
+    
     const hasSessions = useMemo(() => sessions.length > 0, [sessions]);
 
     const applyDateFilter = (nextStartDate, nextEndDate) => {
@@ -86,8 +81,7 @@ export default function Index({ sessions = [], selectedStartDate, selectedEndDat
             {
                 preserveScroll: true,
                 preserveState: true,
-                onSuccess: () => toast.success(`Status timetable berhasil diubah menjadi ${nextStatus === "closed" ? "closed" : "schedule"}.`),
-                onError: () => toast.error("Status timetable gagal diubah."),
+onError: () => toast.error("Status timetable gagal diubah."),
             },
         );
     };

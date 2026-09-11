@@ -67,7 +67,7 @@ class CategoryController extends Controller
         ]);
 
         //redirect
-        return to_route('categories.index');
+        return to_route('categories.index')->with('success', 'Data berhasil disimpan.');
     }
 
     /**
@@ -125,7 +125,7 @@ class CategoryController extends Controller
         ]);
 
         //redirect
-        return to_route('categories.index');
+        return to_route('categories.index')->with('success', 'Data berhasil disimpan.');
     }
 
     /**
@@ -146,6 +146,6 @@ class CategoryController extends Controller
         $category->delete();
 
         //redirect
-        return to_route('categories.index');
+        return to_route('categories.index')->with('success', 'Data berhasil disimpan.');
     }
 }

@@ -86,7 +86,7 @@ class ProductController extends Controller
         ]);
 
         //redirect
-        return to_route('products.index');
+        return to_route('products.index')->with('success', 'Data berhasil disimpan.');
     }
 
     /**
@@ -161,7 +161,7 @@ class ProductController extends Controller
         ]);
 
         //redirect
-        return to_route('products.index');
+        return to_route('products.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function addStock(Request $request)

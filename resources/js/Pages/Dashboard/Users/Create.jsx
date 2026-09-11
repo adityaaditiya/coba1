@@ -35,8 +35,7 @@ export default function Create() {
     const submit = (e) => {
         e.preventDefault();
         post(route("users.store"), {
-            onSuccess: () => toast.success("Pengguna berhasil ditambahkan"),
-            onError: () => toast.error("Gagal menyimpan pengguna"),
+onError: () => toast.error("Gagal menyimpan pengguna"),
         });
     };
 

@@ -63,7 +63,7 @@ class UserController extends Controller
         $user->assignRole($request->selectedRoles);
 
         // render view
-        return to_route('users.index');
+        return to_route('users.index')->with('success', 'Data berhasil disimpan.');
     }
 
     /**
@@ -108,7 +108,7 @@ class UserController extends Controller
         $user->syncRoles($request->selectedRoles);
 
         // render view
-        return to_route('users.index');
+        return to_route('users.index')->with('success', 'Data berhasil disimpan.');
     }
 
     /**

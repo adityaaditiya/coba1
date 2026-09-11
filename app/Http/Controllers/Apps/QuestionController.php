@@ -31,7 +31,7 @@ class QuestionController extends Controller
 
         Question::create($validated);
 
-        return to_route('questions.index');
+        return to_route('questions.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function edit(Question $question)
@@ -47,7 +47,7 @@ class QuestionController extends Controller
 
         $question->update($validated);
 
-        return to_route('questions.index');
+        return to_route('questions.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function destroy(Question $question)

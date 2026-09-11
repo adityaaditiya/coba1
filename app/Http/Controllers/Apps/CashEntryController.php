@@ -57,6 +57,6 @@ class CashEntryController extends Controller
             'amount' => (int) $validated['amount'],
         ]);
 
-        return to_route($type === 'in' ? 'transactions.cash.in' : 'transactions.cash.out');
+        return to_route($type === 'in' ? 'transactions.cash.in' : 'transactions.cash.out')->with('success', 'Data berhasil disimpan.');
     }
 }

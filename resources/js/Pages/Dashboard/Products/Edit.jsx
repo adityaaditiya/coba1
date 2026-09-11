@@ -58,8 +58,7 @@ export default function Edit({ categories, product }) {
     const submit = (e) => {
         e.preventDefault();
         post(route("products.update", product.id), {
-            onSuccess: () => toast.success("Produk berhasil diperbarui"),
-            onError: () => toast.error("Gagal memperbarui produk"),
+onError: () => toast.error("Gagal memperbarui produk"),
         });
     };
 

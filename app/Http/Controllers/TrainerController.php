@@ -69,7 +69,7 @@ class TrainerController extends Controller
 
         Trainer::create($data);
 
-        return to_route('trainers.index');
+        return to_route('trainers.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function edit(Trainer $trainer): Response
@@ -94,13 +94,13 @@ class TrainerController extends Controller
 
         $trainer->update($data);
 
-        return to_route('trainers.index');
+        return to_route('trainers.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function destroy(Trainer $trainer): RedirectResponse
     {
         $trainer->delete();
 
-        return to_route('trainers.index');
+        return to_route('trainers.index')->with('success', 'Data berhasil disimpan.');
     }
 }

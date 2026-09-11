@@ -72,12 +72,17 @@ export default function POSLayout({ children }) {
                         href={route("dashboard")}
                         className="flex items-center gap-2"
                     >
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">
-                                O
-                            </span>
-                        </div>
-                        <span className="hidden sm:block text-lg font-bold text-slate-800 dark:text-white">
+                        {usePage().props.landingPageSetting?.studio_logo_image ? (
+                            <img src={usePage().props.landingPageSetting.studio_logo_image.startsWith('http') 
+                                ? usePage().props.landingPageSetting.studio_logo_image 
+                                : `/storage/landing-page/${usePage().props.landingPageSetting.studio_logo_image}`} 
+                                alt="Logo" className="w-8 h-8 rounded-full object-cover" />
+                        ) : (
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
+                                <span className="text-white font-bold text-sm">O</span>
+                            </div>
+                        )}
+                        <span className="hidden sm:block text-lg font-bold text-slate-800 dark:text-white whitespace-nowrap">
                             {usePage().props.landingPageSetting?.studio_name || "ORO Pilates Studio"}
                         </span>
                     </Link>

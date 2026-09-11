@@ -23,16 +23,6 @@ export default function Transfer({ customers = [], senderMemberships = [] }) {
         notes: "",
     });
 
-    useEffect(() => {
-        if (flash?.success) {
-            toast.success(flash.success);
-        }
-
-        if (flash?.error) {
-            toast.error(flash.error);
-        }
-    }, [flash]);
-
     // State untuk teks input pencarian
     const [senderSearch, setSenderSearch] = useState("");
     const [receiverSearch, setReceiverSearch] = useState("");

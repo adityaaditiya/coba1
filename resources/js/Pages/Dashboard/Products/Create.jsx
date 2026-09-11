@@ -48,8 +48,7 @@ export default function Create({ categories }) {
     const submit = (e) => {
         e.preventDefault();
         post(route("products.store"), {
-            onSuccess: () => toast.success("Produk berhasil ditambahkan"),
-            onError: () => toast.error("Gagal menyimpan produk"),
+onError: () => toast.error("Gagal menyimpan produk"),
         });
     };
 

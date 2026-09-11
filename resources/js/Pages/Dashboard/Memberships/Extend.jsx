@@ -111,16 +111,6 @@ export default function Extend({ customers = [], activeMemberships = [], payment
         || (!isComplimentary && !data.payment_method);
 
     useEffect(() => {
-        if (flash?.success) {
-            toast.success(flash.success);
-        }
-
-        if (flash?.error) {
-            toast.error(flash.error);
-        }
-    }, [flash]);
-
-    useEffect(() => {
         if (isComplimentary && data.payment_method !== "complimentary") {
             setData("payment_method", "complimentary");
         }

@@ -19,8 +19,7 @@ export default function Edit({ appointmentSession }) {
     const submit = (event) => {
         event.preventDefault();
         put(route("appointment-sessions.update", appointmentSession.id), {
-            onSuccess: () => toast.success("Sesi Appointment berhasil diperbarui"),
-            onError: () => toast.error("Gagal memperbarui sesi appointment"),
+onError: () => toast.error("Gagal memperbarui sesi appointment"),
         });
     };
 

@@ -16,11 +16,6 @@ export default function PaymentActivation({ setting }) {
         credit_card_enabled: setting?.credit_card_enabled ?? false,
     });
 
-    useEffect(() => {
-        if (flash?.success) toast.success(flash.success);
-        if (flash?.error) toast.error(flash.error);
-    }, [flash]);
-
     const handleSubmit = (e) => {
         e.preventDefault();
         put(route("settings.payment-activation.update"), {

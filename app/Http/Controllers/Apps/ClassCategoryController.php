@@ -43,7 +43,7 @@ class ClassCategoryController extends Controller
             'description' => $request->description,
         ]);
 
-        return to_route('class-categories.index');
+        return to_route('class-categories.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function edit(ClassCategory $classCategory)
@@ -73,7 +73,7 @@ class ClassCategoryController extends Controller
                 'description' => $request->description,
             ]);
 
-            return to_route('class-categories.index');
+            return to_route('class-categories.index')->with('success', 'Data berhasil disimpan.');
         }
 
         $classCategory->update([
@@ -81,7 +81,7 @@ class ClassCategoryController extends Controller
             'description' => $request->description,
         ]);
 
-        return to_route('class-categories.index');
+        return to_route('class-categories.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function destroy(ClassCategory $classCategory)
@@ -89,6 +89,6 @@ class ClassCategoryController extends Controller
         Storage::disk('local')->delete('public/class-categories/' . basename($classCategory->getRawOriginal('image')));
         $classCategory->delete();
 
-        return to_route('class-categories.index');
+        return to_route('class-categories.index')->with('success', 'Data berhasil disimpan.');
     }
 }

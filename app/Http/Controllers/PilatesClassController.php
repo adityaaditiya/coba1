@@ -74,7 +74,7 @@ class PilatesClassController extends Controller
         $class = PilatesClass::create($data);
         $class->trainers()->sync($trainerIds);
 
-        return to_route('classes.index');
+        return to_route('classes.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function edit(PilatesClass $class): Response
@@ -137,6 +137,6 @@ class PilatesClassController extends Controller
         Storage::disk('local')->delete('public/classes/' . basename($class->image));
         $class->delete();
 
-        return to_route('classes.index');
+        return to_route('classes.index')->with('success', 'Data berhasil disimpan.');
     }
 }

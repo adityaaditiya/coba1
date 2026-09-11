@@ -19,8 +19,7 @@ export default function Create() {
     const submit = (event) => {
         event.preventDefault();
         post(route("appointment-sessions.store"), {
-            onSuccess: () => toast.success("Sesi Appointment berhasil ditambahkan"),
-            onError: () => toast.error("Gagal menyimpan sesi appointment"),
+onError: () => toast.error("Gagal menyimpan sesi appointment"),
         });
     };
 

@@ -7,8 +7,14 @@ import { Menu } from "@/Utils/Menu";
 import { useEffect } from "react";
 
 export default function Sidebar({ sidebarOpen }) {
-    const { auth } = usePage().props;
+    const { auth, landingPageSetting = {} } = usePage().props;
     const menuNavigation = Menu();
+    const studioLogoImage = landingPageSetting?.studio_logo_image 
+        ? (landingPageSetting.studio_logo_image.startsWith('http') 
+            ? landingPageSetting.studio_logo_image 
+            : `/storage/landing-page/${landingPageSetting.studio_logo_image}`) 
+        : null;
+
     useEffect(() => {
         if (sidebarOpen && window.innerWidth < 768) {
             document.body.style.overflow = 'hidden';
@@ -29,25 +35,30 @@ export default function Sidebar({ sidebarOpen }) {
         `}
         >
             {/* Logo */}
-            <div className="flex items-center justify-center h-16 border-b border-slate-100 dark:border-slate-800">
-                {sidebarOpen ? (
-                    <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">
-                                O
-                            </span>
-                        </div>
-                        <span className="text-xl font-bold text-slate-800 dark:text-white">
-                            {usePage().props.landingPageSetting?.studio_name || "ORO Pilates Studio"}
-                        </span>
-                        
-                    </div>
-                ) : (
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
-                        <span className="text-white font-bold text-sm">O</span>
-                    </div>
-                )}
+            <div className={`flex items-center h-16 border-b border-slate-100 dark:border-slate-800 ${sidebarOpen ? 'justify-start px-3' : 'justify-center'}`}>
+    {sidebarOpen ? (
+        <div className="flex items-center gap-2">
+            {studioLogoImage ? (
+                <img src={studioLogoImage} alt="Logo" className="w-6 h-6 rounded-full object-cover" />
+            ) : (
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">O</span>
+                </div>
+            )}
+            <span className="text-xl font-bold text-slate-800 dark:text-white truncate max-w-[170px]">
+                {landingPageSetting?.studio_name || "ORO Pilates Studio"}
+            </span>
+        </div>
+    ) : (
+        studioLogoImage ? (
+            <img src={studioLogoImage} alt="Logo" className="w-6 h-6 rounded-full object-cover" />
+        ) : (
+            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
+                <span className="text-white font-bold text-xs">O</span>
             </div>
+        )
+    )}
+</div>
 
             {/* User Info */}
             <div

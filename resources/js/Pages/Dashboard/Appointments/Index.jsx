@@ -19,12 +19,7 @@ export default function Index({ appointments = [], selectedStartDate, selectedEn
     const [selectedAppointment, setSelectedAppointment] = useState(null);
     const [participantAppointment, setParticipantAppointment] = useState(null);
 
-    React.useEffect(() => {
-        if (flash?.success) {
-            toast.success(flash.success);
-        }
-    }, [flash]);
-
+    
     const hasAppointments = useMemo(() => appointments.length > 0, [appointments]);
 
     const applyFilter = (nextStartDate, nextEndDate) => {

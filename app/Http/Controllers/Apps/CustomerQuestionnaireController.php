@@ -88,6 +88,6 @@ class CustomerQuestionnaireController extends Controller
             );
         }
 
-        return to_route('customers.index');
+        return to_route('customers.index')->with('success', 'Data berhasil disimpan.');
     }
 }

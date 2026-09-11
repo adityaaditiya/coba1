@@ -51,11 +51,6 @@ export default function Payment({ setting, supportedGateways = [] }) {
         return getImageUrl(setting?.qris_image, "payment-settings");
     }, [data.qris_image, setting?.qris_image]);
 
-    useEffect(() => {
-        if (flash?.success) toast.success(flash.success);
-        if (flash?.error) toast.error(flash.error);
-    }, [flash]);
-
     const handleSubmit = (e) => {
         e.preventDefault();
         post(route("settings.payments.update"), {

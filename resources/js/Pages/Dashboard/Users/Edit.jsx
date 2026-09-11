@@ -36,8 +36,7 @@ export default function Edit() {
     const submit = (e) => {
         e.preventDefault();
         post(route("users.update", user.id), {
-            onSuccess: () => toast.success("Pengguna berhasil diperbarui"),
-            onError: () => toast.error("Gagal memperbarui pengguna"),
+onError: () => toast.error("Gagal memperbarui pengguna"),
         });
     };
 

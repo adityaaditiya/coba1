@@ -40,11 +40,6 @@ export default function LandingPage({ setting }) {
         _method: "PUT",
     });
 
-    useEffect(() => {
-        if (flash?.success) toast.success(flash.success);
-        if (flash?.error) toast.error(flash.error);
-    }, [flash]);
-
     const previews = useMemo(
         () => ({
             hero_background_image:

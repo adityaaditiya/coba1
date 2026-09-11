@@ -33,8 +33,7 @@ export default function Edit({ customer }) {
     const submit = (e) => {
         e.preventDefault();
         post(route("customers.update", customer.id), {
-            onSuccess: () => toast.success("Pelanggan berhasil diperbarui"),
-            onError: () => toast.error("Gagal memperbarui pelanggan"),
+onError: () => toast.error("Gagal memperbarui pelanggan"),
         });
     };
 

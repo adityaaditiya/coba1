@@ -4,39 +4,71 @@ import { Menu, Transition } from "@headlessui/react";
 import { IconBell, IconDots, IconChevronRight } from "@tabler/icons-react";
 
 export default function Notification() {
-    const { dashboardNotifications = [] } = usePage().props;
+    const { dashboardNotifications: initialNotifications = [] } = usePage().props;
 
-    // define state isMobile
+    // 1. Simpan ke state agar reaktif saat data baru masuk secara real-time
+    const [notifications, setNotifications] = useState(initialNotifications);
+
+    // Sinkronkan state jika user berpindah halaman via Inertia
+    useEffect(() => {
+        setNotifications(initialNotifications);
+    }, [initialNotifications]);
+
+    // 2. Pasang Listener WebSocket Reverb
+    useEffect(() => {
+        if (!window.Echo) return;
+
+        // Minta izin notifikasi browser jika belum
+        if ("Notification" in window && window.Notification.permission !== "granted" && window.Notification.permission !== "denied") {
+            window.Notification.requestPermission();
+        }
+
+        const channel = window.Echo.channel("dashboard-channel");
+
+        channel.listen(".new.notification", (e) => {
+            if (e?.notification) {
+                // Masukkan notifikasi baru ke urutan paling atas
+                setNotifications((prev) => [e.notification, ...prev]);
+
+                // Tampilkan Pop up Notifikasi Windows / Browser
+                if ("Notification" in window && window.Notification.permission === "granted") {
+                    const notify = new window.Notification(`Pembayaran Baru: ${e.notification.type}`, {
+                        body: `Pelanggan: ${e.notification.customer_name}\nInvoice: ${e.notification.invoice}`,
+                        icon: "/favicon.ico", 
+                    });
+
+                    notify.onclick = function () {
+                        window.focus();
+                        if (e.notification.url) {
+                            window.location.href = e.notification.url;
+                        }
+                    };
+                }
+            }
+        });
+
+        return () => {
+            window.Echo.leaveChannel("dashboard-channel");
+        };
+    }, []);
+
+    // ... sisa kode state mobile, ref, dan handleClickOutside tetap sama ...
     const [isMobile, setIsMobile] = useState(false);
-    // define state isOpen
     const [isOpen, setIsOpen] = useState(false);
-    // define ref notification
     const notificationRef = useRef(null);
 
-    // define method handleClickOutside
     const handleClickOutside = (event) => {
         if (notificationRef.current && !notificationRef.current.contains(event.target)) {
             setIsOpen(false);
         }
     };
 
-    // define useEffect
     useEffect(() => {
-        // define handle resize window
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
-        };
-
-        // define event listener
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
         window.addEventListener('resize', handleResize);
-
-        // add event listener
         window.addEventListener("mousedown", handleClickOutside);
-
-        // call handle resize window
         handleResize();
 
-        // remove event listener
         return () => {
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('mousedown', handleClickOutside);
@@ -45,11 +77,12 @@ export default function Notification() {
 
     return (
         <>
-            {isMobile === false ?
+            {isMobile === false ? (
                 <Menu className="relative z-50" as="div">
                     <Menu.Button className="flex items-center rounded-md group p-2">
+                        {/* Ganti dashboardNotifications.length menjadi notifications.length */}
                         <div className="absolute text-[8px] font-semibold border border-rose-500/40 bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 top-0 -right-2 rounded-md px-1.5 py-0.5 group-hover:scale-125 duration-300 ease-in">
-                            {dashboardNotifications.length}
+                            {notifications.length}
                         </div>
                         <IconBell strokeWidth={1.5} size={18} className="text-gray-700 dark:text-gray-400" />
                     </Menu.Button>
@@ -68,12 +101,13 @@ export default function Notification() {
                             </div>
                             <div className="p-4">
                                 <div className="flex flex-col gap-2 items-start h-60 overflow-y-auto">
-                                    {/* If data is empty */}
-                                    {dashboardNotifications.length === 0 && <div className="text-sm text-gray-500 dark:text-gray-400">Tidak ada notifikasi</div>}
-                                    {dashboardNotifications.map((item, i) => (
+                                    {notifications.length === 0 && (
+                                        <div className="text-sm text-gray-500 dark:text-gray-400">Tidak ada notifikasi</div>
+                                    )}
+                                    {notifications.map((item, i) => (
                                         <Link
-                                            href={item.url}
-                                            className="flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-900"
+                                            href={item.url || "#"}
+                                            className="flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-900 transition-colors"
                                             key={`${item.type}-${item.invoice}-${i}`}
                                         >
                                             <div className="flex items-center gap-4">
@@ -94,11 +128,11 @@ export default function Notification() {
                         </Menu.Items>
                     </Transition>
                 </Menu>
-                :
+            ) : (
                 <div ref={notificationRef}>
                     <button className="flex items-center rounded-md group p-2 relative" onClick={() => setIsOpen(!isOpen)}>
                         <div className="absolute text-[8px] font-semibold border border-rose-500/40 bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 top-0 -right-2 rounded-md px-1.5 py-0.5 group-hover:scale-125 duration-300 ease-in">
-                            {dashboardNotifications.length}
+                            {notifications.length}
                         </div>
                         <IconBell strokeWidth={1.5} size={18} className="text-gray-500 dark:text-gray-400" />
                     </button>
@@ -109,11 +143,13 @@ export default function Notification() {
                         </div>
                         <div className="p-4">
                             <div className="flex flex-col gap-2 items-start overflow-y-auto h-screen">
-                                {dashboardNotifications.length === 0 && <div className="text-sm text-gray-500 dark:text-gray-400">Tidak ada notifikasi</div>}
-                                {dashboardNotifications.map((item, i) => (
+                                {notifications.length === 0 && (
+                                    <div className="text-sm text-gray-500 dark:text-gray-400">Tidak ada notifikasi</div>
+                                )}
+                                {notifications.map((item, i) => (
                                     <Link
-                                        href={item.url}
-                                        className="flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-900"
+                                        href={item.url || "#"}
+                                        className="flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-900 transition-colors"
                                         key={`${item.type}-${item.invoice}-${i}`}
                                         onClick={() => setIsOpen(false)}
                                     >
@@ -134,7 +170,7 @@ export default function Notification() {
                         </div>
                     </div>
                 </div>
-            }
+            )}
         </>
-    )
+    );
 }

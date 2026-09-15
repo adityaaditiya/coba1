@@ -552,7 +552,15 @@ class StudioPageController extends Controller
             'expired_at' => null,
         ]);
 
-        return back()->with('success', 'Foto bukti pembayaran berhasil diupload. Menunggu konfirmasi admin.');
+        event(new \App\Events\NewDashboardNotificationEvent([
+            'type' => 'Appointment',
+            'invoice' => $booking->invoice,
+            'customer_name' => $customer->name ?? '-',
+            'url' => route('appointments.history'),
+            'created_at' => optional($booking->created_at)->toISOString(),
+        ]));
+
+        return back()->with('success', 'Foto bukti pembayaran sesi appointment berhasil diupload. Menunggu konfirmasi admin.');
     }
 
     public function cancelAppointmentTransaction(AppointmentBooking $booking): RedirectResponse
@@ -819,6 +827,14 @@ class StudioPageController extends Controller
             'expired_at' => null,
         ]);
 
+        event(new \App\Events\NewDashboardNotificationEvent([
+            'type' => 'Membership',
+            'invoice' => $userMembership->invoice,
+            'customer_name' => \Illuminate\Support\Facades\Auth::user()->name ?? '-',
+            'url' => route('memberships.history'),
+            'created_at' => optional($userMembership->created_at)->toISOString(),
+        ]));
+
         return back()->with('success', 'Foto bukti pembayaran membership berhasil diupload. Menunggu konfirmasi admin.');
     }
 
@@ -1066,6 +1082,14 @@ class StudioPageController extends Controller
             'expired_at' => null,
             'status' => 'pending',
         ]);
+
+        event(new \App\Events\NewDashboardNotificationEvent([
+            'type' => 'Booking Schedule',
+            'invoice' => $booking->invoice,
+            'customer_name' => \Illuminate\Support\Facades\Auth::user()->name ?? '-',
+            'url' => route('bookings.history'),
+            'created_at' => optional($booking->created_at)->toISOString(),
+        ]));
 
         return back()->with('success', 'Foto bukti pembayaran berhasil diupload. Menunggu konfirmasi admin.');
     }

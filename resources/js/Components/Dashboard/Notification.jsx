@@ -79,54 +79,59 @@ export default function Notification() {
         <>
             {isMobile === false ? (
                 <Menu className="relative z-50" as="div">
-                    <Menu.Button className="flex items-center rounded-md group p-2">
-                        {/* Ganti dashboardNotifications.length menjadi notifications.length */}
-                        <div className="absolute text-[8px] font-semibold border border-rose-500/40 bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 top-0 -right-2 rounded-md px-1.5 py-0.5 group-hover:scale-125 duration-300 ease-in">
-                            {notifications.length}
-                        </div>
-                        <IconBell strokeWidth={1.5} size={18} className="text-gray-700 dark:text-gray-400" />
-                    </Menu.Button>
-                    <Transition
-                        enter="transition duration-100 ease-out"
-                        enterFrom="transform scale-95 opacity-0"
-                        enterTo="transform scale-100 opacity-100"
-                        leave="transition duration-75 ease-out"
-                        leaveFrom="transform scale-100 opacity-100"
-                        leaveTo="transform scale-95 opacity-0"
-                    >
-                        <Menu.Items className="absolute rounded-lg w-[500px] border md:right-0 z-[100] bg-white dark:bg-gray-950 dark:border-gray-900">
-                            <div className="flex justify-between items-center gap-2 p-4 border-b dark:border-gray-900">
-                                <div className="text-lg font-bold text-gray-700 dark:text-gray-200">Notifikasi</div>
-                                <IconDots className="text-gray-500 dark:text-gray-200" size={24} />
-                            </div>
-                            <div className="p-4">
-                                <div className="flex flex-col gap-2 items-start h-60 overflow-y-auto">
-                                    {notifications.length === 0 && (
-                                        <div className="text-sm text-gray-500 dark:text-gray-400">Tidak ada notifikasi</div>
-                                    )}
-                                    {notifications.map((item, i) => (
-                                        <Link
-                                            href={item.url || "#"}
-                                            className="flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-900 transition-colors"
-                                            key={`${item.type}-${item.invoice}-${i}`}
-                                        >
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
-                                                <div>
-                                                    <div className="font-semibold text-sm text-gray-700 dark:text-gray-200">
-                                                        {item.type}
-                                                    </div>
-                                                    <div className="text-gray-500 text-sm">Invoice: {item.invoice || "-"}</div>
-                                                    <div className="text-gray-500 text-sm">Pelanggan: {item.customer_name || "-"}</div>
-                                                </div>
-                                            </div>
-                                            <IconChevronRight size={18} className="text-gray-400" />
-                                        </Link>
-                                    ))}
+                    {({ close }) => (
+                        <>
+                            <Menu.Button className="flex items-center rounded-md group p-2">
+                                {/* Ganti dashboardNotifications.length menjadi notifications.length */}
+                                <div className="absolute text-[8px] font-semibold border border-rose-500/40 bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 top-0 -right-2 rounded-md px-1.5 py-0.5 group-hover:scale-125 duration-300 ease-in">
+                                    {notifications.length}
                                 </div>
-                            </div>
-                        </Menu.Items>
-                    </Transition>
+                                <IconBell strokeWidth={1.5} size={18} className="text-gray-700 dark:text-gray-400" />
+                            </Menu.Button>
+                            <Transition
+                                enter="transition duration-100 ease-out"
+                                enterFrom="transform scale-95 opacity-0"
+                                enterTo="transform scale-100 opacity-100"
+                                leave="transition duration-75 ease-out"
+                                leaveFrom="transform scale-100 opacity-100"
+                                leaveTo="transform scale-95 opacity-0"
+                            >
+                                <Menu.Items className="absolute rounded-lg w-[500px] border md:right-0 z-[100] bg-white dark:bg-gray-950 dark:border-gray-900">
+                                    <div className="flex justify-between items-center gap-2 p-4 border-b dark:border-gray-900">
+                                        <div className="text-lg font-bold text-gray-700 dark:text-gray-200">Notifikasi</div>
+                                        <IconDots className="text-gray-500 dark:text-gray-200" size={24} />
+                                    </div>
+                                    <div className="p-4">
+                                        <div className="flex flex-col gap-2 items-start h-60 overflow-y-auto">
+                                            {notifications.length === 0 && (
+                                                <div className="text-sm text-gray-500 dark:text-gray-400">Tidak ada notifikasi</div>
+                                            )}
+                                            {notifications.map((item, i) => (
+                                                <Link
+                                                    href={item.url || "#"}
+                                                    className="flex items-center justify-between w-full p-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-900 transition-colors"
+                                                    key={`${item.type}-${item.invoice}-${i}`}
+                                                    onClick={() => close()}
+                                                >
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+                                                        <div>
+                                                            <div className="font-semibold text-sm text-gray-700 dark:text-gray-200">
+                                                                {item.type}
+                                                            </div>
+                                                            <div className="text-gray-500 text-sm">Invoice: {item.invoice || "-"}</div>
+                                                            <div className="text-gray-500 text-sm">Pelanggan: {item.customer_name || "-"}</div>
+                                                        </div>
+                                                    </div>
+                                                    <IconChevronRight size={18} className="text-gray-400" />
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </Menu.Items>
+                            </Transition>
+                        </>
+                    )}
                 </Menu>
             ) : (
                 <div ref={notificationRef}>

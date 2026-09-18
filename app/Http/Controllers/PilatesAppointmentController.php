@@ -301,6 +301,21 @@ class PilatesAppointmentController extends Controller
         $validated['session_options'] = $this->normalizeSessionOptions($request->input('session_options', []));
         $startAt = Carbon::parse($validated['start_at'], 'Asia/Jakarta');
 
+        if ($validated['update_scope'] === self::UPDATE_SCOPE_SINGLE) {
+            $tempValidated = $validated;
+            $tempValidated['start_date'] = $startAt->toDateString();
+            $tempValidated['end_date'] = $startAt->toDateString();
+            $singleDayOccurrences = $this->buildOccurrences($tempValidated);
+
+            $matches = $singleDayOccurrences->contains(fn ($occ) => $occ['start_at']->equalTo($startAt));
+
+            if (! $matches) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'schedules' => 'Pilihan Hari & Slot Jam harus sesuai dengan Waktu Mulai Sesi Ini apabila pilihan edit adalah "Hanya Sesi Ini".',
+                ]);
+            }
+        }
+
         if ($validated['update_scope'] === self::UPDATE_SCOPE_FOLLOWING) {
             $appointmentsToUpdate = PilatesAppointment::query()
                 ->where('parent_id', $appointment->parent_id)
@@ -832,15 +847,8 @@ class PilatesAppointmentController extends Controller
                 'end_minute' => $endAt->format('i'),
             ];
 
-            $existingSlots = collect($defaultSchedules[$weekdayKey]['slots'] ?? [])
-                ->reject(fn (array $candidate) => $candidate === [
-                    'start_hour' => '06',
-                    'start_minute' => '00',
-                    'end_hour' => '07',
-                    'end_minute' => '00',
-                ] && ($defaultSchedules[$weekdayKey]['active'] ?? false))
-                ->values()
-                ->all();
+            $isActive = $defaultSchedules[$weekdayKey]['active'] ?? false;
+            $existingSlots = $isActive ? ($defaultSchedules[$weekdayKey]['slots'] ?? []) : [];
 
             $slotExists = collect($existingSlots)->contains(fn (array $candidate) => $candidate === $slot);
 

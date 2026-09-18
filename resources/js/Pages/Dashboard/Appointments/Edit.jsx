@@ -271,6 +271,16 @@ export default function Edit({ classes = [], trainers = [], appointment, appoint
                                 {errors.trainer_ids && <p className="text-xs text-rose-500">{errors.trainer_ids}</p>}
                                 {errors["trainer_ids.0"] && <p className="text-xs text-rose-500">{errors["trainer_ids.0"]}</p>}
                             </div>
+                            
+                            <div className="space-y-2">
+                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Durasi</label>
+                                <select value={data.duration_minutes} onChange={(event) => setData("duration_minutes", event.target.value)} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm dark:border-slate-700 dark:bg-slate-800">
+                                    {[30, 60, 75, 90, 120, 150, 180].map((val) => (
+                                        <option key={val} value={val}>{val} Menit</option>
+                                    ))}
+                                </select>
+                                {errors.duration_minutes && <p className="text-xs text-rose-500">{errors.duration_minutes}</p>}
+                            </div>
 
                             <div className="space-y-2">
                                 <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Waktu Mulai Sesi Ini</label>
@@ -350,21 +360,7 @@ export default function Edit({ classes = [], trainers = [], appointment, appoint
                                     </div>
                                 </div>
                                 {errors.session_options && <p className="text-xs text-rose-500">{errors.session_options}</p>}
-                            </div>
-
-                           
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Durasi</label>
-                                <select value={data.duration_minutes} onChange={(event) => setData("duration_minutes", event.target.value)} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm dark:border-slate-700 dark:bg-slate-800">
-                                    {[30, 60, 75, 90, 120, 150, 180].map((val) => (
-                                        <option key={val} value={val}>{val} Menit</option>
-                                    ))}
-                                </select>
-                                {errors.duration_minutes && <p className="text-xs text-rose-500">{errors.duration_minutes}</p>}
-                            </div>
-
-                            
+                            </div>       
                         </div>
 
                         <div className="space-y-4 rounded-3xl border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/40">

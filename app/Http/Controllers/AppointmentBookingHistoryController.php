@@ -231,7 +231,7 @@ class AppointmentBookingHistoryController extends Controller
             ]);
         });
 
-        return back()->with('success', 'Transaksi appointment berhasil dibatalkan. Credit customer dan slot appointment telah dikembalikan.');
+        return back();
     }
 
     public function confirmPayment(AppointmentBooking $booking): RedirectResponse

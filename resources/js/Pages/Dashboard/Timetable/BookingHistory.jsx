@@ -406,17 +406,17 @@ export default function BookingHistory({ bookings, filters = {} }) {
                     onSuccess: () => {
                         Swal.fire({
                             title: "Berhasil!",
-                            text: "Booking berhasil dibatalkan.",
+                            text: "Booking Schedule berhasil dibatalkan. Slot peserta dan credits telah dikembalikan.",
                             icon: "success",
                             showConfirmButton: false,
-                            timer: 1500,
+                            timer: 2500,
                         });
                     },
                     onError: (errors) => {
                         Swal.fire({
                             title: "Gagal!",
                             text:
-                                errors?.message || "Booking gagal dibatalkan.",
+                                errors?.message || "Booking Schedulegagal dibatalkan.",
                             icon: "error",
                         });
                     },

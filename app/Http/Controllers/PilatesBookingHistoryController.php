@@ -230,7 +230,7 @@ class PilatesBookingHistoryController extends Controller
             ]);
         });
 
-        return back()->with('success', 'Booking berhasil dibatalkan. Slot peserta dan credit telah dikembalikan.');
+        return back();
     }
 
     public function confirmPayment(PilatesBooking $booking)

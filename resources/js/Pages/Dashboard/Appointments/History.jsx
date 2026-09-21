@@ -401,10 +401,10 @@ export default function History({ bookings, filters = {} }) {
                     onSuccess: () => {
                         Swal.fire({
                             title: "Berhasil!",
-                            text: "Transaksi appointment berhasil dibatalkan.",
+                            text: "Transaksi Appointment berhasil dibatalkan. Credits customer dan slot Appointment telah dikembalikan.",
                             icon: "success",
                             showConfirmButton: false,
-                            timer: 1500,
+                            timer: 2500,
                         });
                     },
                     onError: (errors) => {

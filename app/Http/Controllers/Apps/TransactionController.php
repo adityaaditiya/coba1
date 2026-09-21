@@ -703,6 +703,6 @@ class TransactionController extends Controller
             ]);
         });
 
-        return back()->with('success', 'Transaksi berhasil dibatalkan.');
+        return back();
     }
 }

@@ -130,7 +130,7 @@ class MembershipHistoryController extends Controller
             ]);
         });
 
-        return back()->with('success', 'Transaksi membership berhasil dibatalkan dan credit customer dikembalikan.');
+        return back();
     }
 
     public function confirmPayment(UserMembership $userMembership): RedirectResponse

@@ -603,6 +603,9 @@ class StudioPageController extends Controller
             'pilatesClass.classCategory:id,name',
             'trainer:id,user_id,expertise,biodata',
         ]);
+        $pilatesTimetable->loadSum(['bookings as booked_slots' => fn ($query) => $this->bookingSlotsQuery($query)], 'participants');
+        $bookedSlots = (int) ($pilatesTimetable->booked_slots ?? 0);
+        $schedule->remaining_slots = max(0, ((int) $schedule->capacity) - $bookedSlots);
         $requiredQuestionnaire = $this->buildRequiredQuestionnaireForAuthenticatedUser();
 
         return Inertia::render('WelcomeScheduleDetail', [
@@ -668,6 +671,7 @@ class StudioPageController extends Controller
                     'plan_name' => $membership->plan?->name,
                     'credits_remaining' => $membership->credits_remaining,
                     'credit_cost' => $rule?->credit_cost ?? 1,
+                    'expires_at' => optional($membership->expires_at)->toISOString(),
                 ];
             })
             ->values();

@@ -66,7 +66,7 @@ export default function Plans({ plans }) {
                                         <IconTicket size={24} />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-medium text-primary-800 dark:text-primary-300">Total Kredit</p>
+                                        <p className="text-sm font-medium text-primary-800 dark:text-primary-300">Total Credits</p>
                                         <p className="text-xl font-bold text-primary-900 dark:text-white">{plan.credits} Credits</p>
                                     </div>
                                 </div>

@@ -10,7 +10,17 @@
     <!-- Fonts - Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="icon" type="image/png" href="{{ asset('storage/landing-page/plYZJuRLgFA5MJUQrjXFietZPFZMEMMZ4xwYKmAX.png') }}?v=1">
+    <!-- <link rel="icon" type="image/png" href="{{ asset('storage/landing-page/plYZJuRLgFA5MJUQrjXFietZPFZMEMMZ4xwYKmAX.png') }}?v=1"> -->
+
+        @php
+        $studioSetting = \App\Models\LandingPageSetting::first();
+        $studioFavicon = $studioSetting && filled($studioSetting->studio_logo_image)
+            ? (str_starts_with($studioSetting->studio_logo_image, 'http')
+                ? $studioSetting->studio_logo_image
+                : asset('storage/landing-page/' . basename($studioSetting->studio_logo_image)))
+            : asset('favicon.ico');
+        @endphp
+    <link rel="icon" type="image/png" href="{{ $studioFavicon }}">
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">

@@ -90,7 +90,7 @@ export default function Transfer({ customers = [], senderMemberships = [] }) {
                     {/* Header Halaman */}
                     <div className="mb-8">
                         <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-200">Transfer Membership</h1>
-                        <p className="text-sm text-slate-500 mt-1">Maksimalkan sisa kredit dengan fitur transfer antar member dengan aman.</p>
+                        <p className="text-sm text-slate-500 mt-1">Maksimalkan sisa credits dengan fitur transfer antar member dengan aman.</p>
                     </div>
 
                     {/* Main Container Layout */}

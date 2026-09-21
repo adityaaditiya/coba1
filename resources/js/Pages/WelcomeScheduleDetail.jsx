@@ -6,6 +6,8 @@ import {
     IconClock,
     IconUser,
     IconStar,
+    IconSparkles,
+    IconUsers,
     IconYoga,
     IconTrash,
 } from "@tabler/icons-react";
@@ -64,7 +66,11 @@ export default function WelcomeScheduleDetail({ schedule, requiredQuestionnaire 
         setData("answers", { ...data.answers, [questionId]: next });
     };
 
+    const isFull = schedule.remaining_slots !== undefined && schedule.remaining_slots <= 0;
+
     const onConfirmBookingClick = () => {
+        if (isFull) return;
+
         if (!auth?.user) {
             window.location.href = route("login");
             return;
@@ -94,9 +100,9 @@ export default function WelcomeScheduleDetail({ schedule, requiredQuestionnaire 
         { label: "Category", value: schedule.pilates_class?.class_category?.name || "-" },
         { label: "Date", value: formatDate(schedule.start_at) },
         { label: "Time", value: `${formatTime(schedule.start_at)} WIB` },
-        { label: "Duration", value: `${schedule.duration_minutes} menit` },
+        // { label: "Duration", value: `${schedule.duration_minutes} menit` },
         { label: "Equipment", value: <div className="whitespace-pre-line">{schedule.pilates_class?.equipment || "-"}</div> },
-        { label: "Capacity", value: `${schedule.capacity} peserta` },
+        // { label: "Capacity", value: `${schedule.capacity} peserta` },
     ];
 
     return (
@@ -145,26 +151,63 @@ export default function WelcomeScheduleDetail({ schedule, requiredQuestionnaire 
                                         Demi kenyamanan bersama, kami sangat menghargai kerja sama Anda untuk tidak melakukan pembatalan mendadak.
                                     </p>
                                     <p className="mt-2 text-sm text-wellness-muted whitespace-pre-line text-justify">
-                                        Catatan: Pengembalian kredit/saldo hanya berlaku untuk pembatalan yang dilakukan maksimal 24 jam. Pembatalan setelah melewati batas waktu tersebut akan dianggap hangus.
+                                        Catatan: Pengembalian credits/saldo hanya berlaku untuk pembatalan yang dilakukan maksimal 24 jam sebelum sesi. Pembatalan setelah melewati batas waktu tersebut akan dianggap hangus.
                                     </p>
                                 </div>
                             </div>
                         </aside>
 
                         <article className="self-start overflow-hidden rounded-3xl border border-primary-100 bg-white shadow-sm">
-                            <img
-                                src={imageUrl("classes", schedule.pilates_class?.image)}
-                                alt={schedule.pilates_class?.name}
-                                className="h-72 w-full object-cover md:h-96"
-                            />
+                            <div className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100 sm:aspect-[16/10] lg:aspect-[4/3]">
+                                    {schedule.pilates_class?.image ? (
+                                        <img
+                                            src={imageUrl("classes", schedule.pilates_class.image)}
+                                            alt={schedule.pilates_class?.name}
+                                            className="h-full w-full object-cover object-center transition-transform duration-700 hover:scale-105"
+                                        />
+                                    ) : (
+                                        <div className="flex h-full w-full items-center justify-center text-xs uppercase tracking-widest text-stone-400">
+                                            No Image Available
+                                        </div>
+                                    )}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent" />
+                                    <div className="absolute bottom-4 left-4 right-4 text-white">
+                                        <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider backdrop-blur-md">
+                                            <IconSparkles size={12} /> {schedule.pilates_class?.class_category?.name}
+                                        </span>
+                                        {/* <h3 className="mt-1 text-lg font-bold tracking-tight">
+                                            {schedule.pilates_class?.name}
+                                        </h3> */}
+                                    </div>
+                                </div>
                             <div className="space-y-4 p-6 md:p-8">
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <span className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700">
+                                        <IconStar size={14} /> {schedule.pilates_class?.difficulty_level || "All Levels"}
+                                    </span>
+                                    {schedule.duration_minutes && (
+                                        <span className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700">
+                                            <IconClock size={14} /> {schedule.duration_minutes} menit
+                                        </span>
+                                    )}
+                                    {schedule.capacity && (
+                                        <span className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700">
+                                            <IconUsers size={14} /> {schedule.capacity} peserta
+                                        </span>
+                                    )}
+                                </div>
                                 <h1 className="text-3xl font-bold">{schedule.pilates_class?.name}</h1>
                                 <p className="text-justify text-wellness-muted">{schedule.pilates_class?.about}</p>
                                 <button
                                     onClick={onConfirmBookingClick}
-                                    className="w-full rounded-full bg-primary-600 py-4 text-center font-bold text-white transition hover:bg-primary-700"
+                                    disabled={isFull}
+                                    className={`w-full rounded-full py-4 text-center font-bold text-white transition ${
+                                        isFull
+                                            ? "bg-primary-600 opacity-50 cursor-not-allowed"
+                                            : "bg-primary-600 hover:bg-primary-700"
+                                    }`}
                                 >
-                                    Confirm Booking
+                                    {isFull ? "Fully Reserved" : "Confirm Booking"}
                                 </button>
                             </div>
                         </article>

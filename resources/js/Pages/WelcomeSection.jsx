@@ -1211,13 +1211,35 @@ useEffect(() => {
                                                             </div>
 
                                                             <div className="md:text-right">
-                                                                <p className="text-sm font-medium text-primary-700 text-right">{getRemainingSlots(item)} Slot tersisa</p>
-                                                                <Link
-                                                                    href={auth?.user ? route("welcome.schedule-detail", item.id) : route("login", { redirect: route("welcome.schedule-detail", item.id, false) })}
-                                                                    className="mt-2 flex w-full items-center justify-center md:inline-flex md:w-auto rounded-full bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-700"
-                                                                >
-                                                                    Book Now
-                                                                </Link>
+                                                                {(() => {
+                                                                    const remainingSlots = getRemainingSlots(item);
+                                                                    const isFull = remainingSlots <= 0;
+
+                                                                    return (
+                                                                        <>
+                                                                            <p className={`text-sm font-medium text-right ${isFull ? "text-slate-400" : "text-primary-700"}`}>
+                                                                                {remainingSlots} Slot tersisa
+                                                                            </p>
+                                                                            {isFull ? (
+                                                                                <button
+                                                                                    type="button"
+                                                                                    disabled
+                                                                                    aria-disabled="true"
+                                                                                    className="mt-2 flex w-full items-center justify-center md:inline-flex md:w-[150px] rounded-full bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white opacity-50 cursor-not-allowed shadow-none whitespace-nowrap"
+                                                                                >
+                                                                                    Fully Reserved
+                                                                                </button>
+                                                                            ) : (
+                                                                                <Link
+                                                                                    href={auth?.user ? route("welcome.schedule-detail", item.id) : route("login", { redirect: route("welcome.schedule-detail", item.id, false) })}
+                                                                                    className="mt-2 flex w-full items-center justify-center md:inline-flex md:w-[150px] rounded-full bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-700 whitespace-nowrap"
+                                                                                >
+                                                                                    Book Now
+                                                                                </Link>
+                                                                            )}
+                                                                        </>
+                                                                    );
+                                                                })()}
                                                             </div>
                                                         </div>
                                                     </article>
@@ -1480,7 +1502,7 @@ useEffect(() => {
                                             {/* <p className="text-sm font-semibold text-wellness-text">Metode pembayaran</p> */}
                                             <ul className="space-y-2 text-sm text-wellness-muted">
                                                 <li className="flex items-start gap-2 text-justify"><IconCheck size={16} className="mt-0.5 text-primary-600" /> Demi kenyamanan bersama, kami sangat menghargai kerja sama Anda untuk tidak melakukan pembatalan mendadak agar jadwal kelas tetap berjalan efektif.</li>
-                                                <li className="flex items-start gap-2 text-justify"><IconCheck size={16} className="mt-0.5 text-primary-600" /> Catatan: Pengembalian kredit/saldo hanya berlaku untuk pembatalan yang dilakukan maksimal 24 jam sebelum sesi dimulai. Pembatalan setelah melewati batas waktu tersebut akan dianggap hangus.</li>
+                                                <li className="flex items-start gap-2 text-justify"><IconCheck size={16} className="mt-0.5 text-primary-600" /> Catatan: Pengembalian credits/saldo hanya berlaku untuk pembatalan yang dilakukan maksimal 24 jam sebelum sesi dimulai. Pembatalan setelah melewati batas waktu tersebut akan dianggap hangus.</li>
                                             </ul>
                                         </div>
                                 </article>

@@ -73,7 +73,7 @@ export default function WelcomeClassDetail({  navItems = defaultNavItems, classI
                                 <p className="inline-flex items-center gap-2 rounded-full bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700">
                                     <IconStar size={14} /> {classItem.difficulty_level || "Open to all"}
                                 </p> &nbsp;
-                                <p className="inline-flex items-center gap-2 rounded-full bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700"><IconClock size={16} /> Durasi {classItem.duration || "-"} menit</p>
+                                <p className="inline-flex items-center gap-2 rounded-full bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700"><IconClock size={16} /> {classItem.duration || "-"} menit</p>
                                 <h1 className="text-3xl font-bold md:text-4xl">{classItem.name}</h1>
                                 <p className="text-wellness-muted text-justify">{classItem.about || "Kelas ini dirancang untuk membantu progres latihan pilates Anda secara konsisten."}</p>
                                 <div className="grid gap-3 text-sm text-wellness-muted sm:grid-cols-2">

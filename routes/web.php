@@ -164,6 +164,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
         ->middleware('permission:questions-edit')
         ->name('questions.move');
 
+    Route::get('customers/{customer}/questionnaire/data', [CustomerQuestionnaireController::class, 'show'])
+        ->middleware('permission:customers-access')
+        ->name('customers.questionnaire.show');
     Route::get('customers/{customer}/questionnaire', [CustomerQuestionnaireController::class, 'edit'])
         ->middleware('permission:customers-edit')
         ->name('customers.questionnaire.edit');

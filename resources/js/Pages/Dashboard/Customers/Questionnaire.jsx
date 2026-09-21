@@ -97,7 +97,7 @@ export default function Questionnaire({ customer, questions }) {
                         Export PDF
                     </a>
                     <div className="flex items-center gap-3">
-                        {/* <Link href={route("customers.index")} className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium transition-colors">Kembali</Link> */}
+                        <Link href={route("customers.index")} className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium transition-colors">Kembali</Link>
                         <button disabled={processing} className="px-4 py-2 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium transition-colors">Simpan Jawaban</button>
                     </div>
                 </div>

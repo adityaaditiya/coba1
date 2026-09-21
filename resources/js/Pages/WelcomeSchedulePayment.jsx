@@ -159,7 +159,6 @@ export default function WelcomeSchedulePayment({
 
     const confirmPayment = () => {
         post(route("welcome.schedule-payment.process", schedule.id), {
-            preserveScroll: true,
             onSuccess: () => setShowConfirmModal(false),
         });
     };

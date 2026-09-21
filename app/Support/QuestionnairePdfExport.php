@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class QuestionnairePdfExport
 {
-    public static function download(Customer $customer): Response
+    public static function download(Customer $customer, bool $includeCustomerData = true): Response
     {
         $customer->loadMissing('user');
 
@@ -53,8 +53,10 @@ class QuestionnairePdfExport
             $questionRows[] = ['-', 'Belum ada data pertanyaan kuesioner.', '-', '-'];
         }
 
-        $sections = [
-            [
+        $sections = [];
+
+        if ($includeCustomerData) {
+            $sections[] = [
                 'title' => 'DATA PELANGGAN',
                 'headers' => ['Informasi', 'Keterangan'],
                 'rows' => [
@@ -66,14 +68,15 @@ class QuestionnairePdfExport
                 ],
                 'column_widths' => [2.5, 7.5],
                 'footer_lines' => [],
-            ],
-            [
-                'title' => 'DAFTAR PERTANYAAN & JAWABAN KUESIONER',
-                'headers' => ['No', 'Pertanyaan', 'Jawaban'],
-                'rows' => $questionRows,
-                'column_widths' => [0.6, 6.2, 3.2],
-                'footer_lines' => [],
-            ],
+            ];
+        }
+
+        $sections[] = [
+            'title' => 'FORM KUESIONER',
+            'headers' => ['No', 'Pertanyaan', 'Jawaban'],
+            'rows' => $questionRows,
+            'column_widths' => [0.6, 6.2, 3.2],
+            'footer_lines' => [],
         ];
 
         $customerNameUpper = strtoupper($customer->name ?: 'PELANGGAN');

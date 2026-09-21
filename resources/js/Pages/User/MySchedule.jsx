@@ -1,5 +1,7 @@
-import { Head, Link, router } from "@inertiajs/react";
+import { useEffect } from "react";
+import { Head, Link, router, usePage } from "@inertiajs/react";
 import Navbar from "@/Components/Landing/Navbar";
+import { Toaster, toast } from "react-hot-toast";
 import {
     IconCalendarEvent,
     IconClock,
@@ -57,6 +59,17 @@ const applyFilters = (filters) => {
 };
 
 export default function MySchedule({ bookings = [], filters = {} }) {
+    const { flash } = usePage().props;
+
+    useEffect(() => {
+        if (flash?.success) {
+            toast.success(flash.success);
+        }
+        if (flash?.error) {
+            toast.error(flash.error);
+        }
+    }, [flash]);
+
     const handleFilterChange = (key, value) => {
         applyFilters({
             ...filters,
@@ -75,6 +88,7 @@ export default function MySchedule({ bookings = [], filters = {} }) {
     return (
         <>
             <Head title="My Schedule" />
+            <Toaster position="top-center" />
 
             <div className="min-h-screen bg-gradient-to-b from-wellness-beige to-white text-wellness-text">
                 <Navbar currentKey={null} />

@@ -137,17 +137,17 @@ export default function MyForm({ questions = [] }) {
                                 href={route("user.my-form.export-pdf")}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-5 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100 transition shadow-sm"
+                                className="inline-flex items-center gap-1 rounded-full border border-rose-200 bg-rose-50 px-5 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100 transition shadow-sm"
                             >
                                 <IconFileTypePdf size={18} />
-                                Export PDF
+                                Unduh
                             </a>
                             <button
                                 type="submit"
                                 disabled={processing || questions.length === 0}
                                 className="rounded-full bg-primary-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
                             >
-                                Simpan Form
+                                Simpan Perubahan
                             </button>
                         </div>
                     </form>

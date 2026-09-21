@@ -119,6 +119,6 @@ class UserFormController extends Controller
 
         abort_unless($customer, 404);
 
-        return \App\Support\QuestionnairePdfExport::download($customer);
+        return \App\Support\QuestionnairePdfExport::download($customer, false);
     }
 }

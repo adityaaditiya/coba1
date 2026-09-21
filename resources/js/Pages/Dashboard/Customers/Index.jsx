@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import { Head, usePage, Link, router } from "@inertiajs/react";
 import Button from "@/Components/Dashboard/Button";
+import axios from "axios";
 import {
     IconCirclePlus,
     IconDatabaseOff,
@@ -15,6 +16,9 @@ import {
     IconMail,
     IconClipboardText,
     IconUserStar,
+    IconFileTypePdf,
+    IconX,
+    IconLoader2,
 } from "@tabler/icons-react";
 import Search from "@/Components/Dashboard/Search";
 import Table from "@/Components/Dashboard/Table";
@@ -22,7 +26,7 @@ import Pagination from "@/Components/Dashboard/Pagination";
 import Swal from "sweetalert2";
 
 // Customer Card for Grid View
-function CustomerCard({ customer }) {
+function CustomerCard({ customer, onOpenQuestionnaire }) {
     const isTrainer = customer.user?.roles?.some(r => r.name === 'trainer');
 
     const handleAssignTrainer = () => {
@@ -106,14 +110,14 @@ function CustomerCard({ customer }) {
 
             {/* Actions */}
             <div className="flex items-center gap-2 pt-4 border-t border-slate-100 dark:border-slate-800 mt-auto">
-                <Link
-                    href={route("customers.questionnaire.edit", customer.id)}
+                <button
+                    type="button"
+                    onClick={() => onOpenQuestionnaire(customer)}
                     className="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-primary-100 text-primary-600 hover:bg-primary-200 dark:bg-primary-900/50 dark:text-primary-400 text-sm font-medium transition-colors"
                     title="Kuesioner"
                 >
                     <IconClipboardText size={18} />
-                    {/* <span>Kuesioner</span> */}
-                </Link>
+                </button>
                 <Link
                     href={route("customers.edit", customer.id)}
                     className="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-warning-50 text-warning-600 hover:bg-warning-500 hover:text-white border border-warning-100 transition-all"
@@ -146,6 +150,29 @@ function CustomerCard({ customer }) {
 export default function Index({ customers }) {
     const { roles, permissions, errors } = usePage().props;
     const [viewMode, setViewMode] = useState("grid");
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
+    const [questionnaireData, setQuestionnaireData] = useState(null);
+    const [isLoadingQuestionnaire, setIsLoadingQuestionnaire] = useState(false);
+
+    const handleOpenQuestionnaire = async (customer) => {
+        setSelectedCustomer(customer);
+        setQuestionnaireData(null);
+        setIsLoadingQuestionnaire(true);
+
+        try {
+            const response = await axios.get(route("customers.questionnaire.show", customer.id));
+            setQuestionnaireData(response.data);
+        } catch (error) {
+            console.error("Gagal memuat data kuesioner:", error);
+        } finally {
+            setIsLoadingQuestionnaire(false);
+        }
+    };
+
+    const handleCloseQuestionnaire = () => {
+        setSelectedCustomer(null);
+        setQuestionnaireData(null);
+    };
 
     return (
         <>
@@ -218,6 +245,7 @@ export default function Index({ customers }) {
                             <CustomerCard
                                 key={customer.id}
                                 customer={customer}
+                                onOpenQuestionnaire={handleOpenQuestionnaire}
                             />
                         ))}
                     </div>
@@ -297,22 +325,17 @@ export default function Index({ customers }) {
                                                         customer.id
                                                     )}
                                                 />
-                                                <Button
-                                                    type={"edit"}
-                                                    icon={
-                                                        <IconClipboardText
-                                                            size={16}
-                                                            strokeWidth={1.5}
-                                                        />
-                                                    }
-                                                    className={
-                                                        "border bg-primary-100 border-primary-200 text-primary-600 hover:bg-primary-200 dark:bg-primary-900/50 dark:border-primary-800 dark:text-primary-400"
-                                                    }
-                                                    href={route(
-                                                        "customers.questionnaire.edit",
-                                                        customer.id
-                                                    )}
-                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleOpenQuestionnaire(customer)}
+                                                    className="p-2 border rounded-xl bg-primary-100 border-primary-200 text-primary-600 hover:bg-primary-200 dark:bg-primary-900/50 dark:border-primary-800 dark:text-primary-400 transition-colors"
+                                                    title="Kuesioner"
+                                                >
+                                                    <IconClipboardText
+                                                        size={16}
+                                                        strokeWidth={1.5}
+                                                    />
+                                                </button>
                                                 <Button
                                                     type={"delete"}
                                                     icon={
@@ -367,6 +390,140 @@ export default function Index({ customers }) {
 
             {customers.last_page !== 1 && (
                 <Pagination links={customers.links} />
+            )}
+
+            {/* Pop-up Modal Kuesioner Pelanggan */}
+            {selectedCustomer && (
+                <div 
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4"
+                    onClick={handleCloseQuestionnaire}
+                >
+                    <div 
+                        className="flex flex-col max-h-[90vh] w-full max-w-2xl rounded-2xl bg-white dark:bg-slate-900 shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Header Modal */}
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
+                            <div>
+                                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+                                    Kuesioner - {selectedCustomer.name}
+                                </h3>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                    {selectedCustomer.no_telp ? `${selectedCustomer.no_telp} • ` : ""}
+                                    {selectedCustomer.user?.email || "Tidak ada email"}
+                                </p>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={handleCloseQuestionnaire}
+                                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-300 transition-colors"
+                                title="Tutup"
+                            >
+                                <IconX size={20} />
+                            </button>
+                        </div>
+
+                        {/* Konten Kuesioner */}
+                        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                            {isLoadingQuestionnaire ? (
+                                <div className="flex flex-col items-center justify-center py-12 text-slate-500">
+                                    <IconLoader2 size={32} className="animate-spin text-primary-500 mb-2" />
+                                    <p className="text-sm">Memuat data kuesioner...</p>
+                                </div>
+                            ) : questionnaireData?.questions && questionnaireData.questions.length > 0 ? (
+                                <div className="space-y-3">
+                                    {questionnaireData.questions.map((q, idx) => {
+                                        const isAnswered = q.input_type === "checkbox" 
+                                            ? Array.isArray(q.answer) && q.answer.length > 0
+                                            : q.answer !== null && q.answer !== "" && q.answer !== undefined;
+
+                                        return (
+                                            <div
+                                                key={q.id || idx}
+                                                className="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-800/40"
+                                            >
+                                                <div className="flex items-start justify-between gap-3 mb-2">
+                                                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                                        {idx + 1}. {q.question_text}
+                                                        {q.is_required && <span className="text-rose-500 ml-1">*</span>}
+                                                    </p>
+                                                    {/* <span className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border border-slate-200 dark:border-slate-600 flex-shrink-0">
+                                                        {{
+                                                            text: "Teks",
+                                                            number: "Nomor",
+                                                            multiple_choice: "Pilihan Ganda",
+                                                            checkbox: "Checkbox",
+                                                        }[q.input_type] || q.input_type}
+                                                    </span> */}
+                                                </div>
+                                                <div className="text-sm">
+                                                    {isAnswered ? (
+                                                        q.input_type === "checkbox" && Array.isArray(q.answer) ? (
+                                                            <div className="flex flex-wrap gap-1.5 mt-1">
+                                                                {q.answer.map((val) => (
+                                                                    <span
+                                                                        key={val}
+                                                                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-700 dark:bg-primary-950/50 dark:text-primary-300 border border-primary-200/60 dark:border-primary-800/50"
+                                                                    >
+                                                                        {val}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        ) : (
+                                                            <p className="text-slate-700 dark:text-slate-300 whitespace-pre-wrap font-medium">
+                                                                {String(q.answer)}
+                                                            </p>
+                                                        )
+                                                    ) : (
+                                                        <p className="text-slate-400 dark:text-slate-500 italic text-xs">
+                                                            Belum diisi
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="text-center py-10 text-slate-500 dark:text-slate-400">
+                                    <p className="text-sm">Belum ada data pertanyaan kuesioner.</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Footer Modal: Tombol Export PDF di pojok kiri bawah, Tombol Edit & Tutup di sebelah kanan */}
+                        <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
+                            {/* Tombol Export PDF di ujung pojok bawah sebelah kiri form */}
+                            <a
+                                href={route("customers.questionnaire.export-pdf", selectedCustomer.id)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm font-semibold shadow-sm transition-colors"
+                            >
+                                <IconFileTypePdf size={18} />
+                                Export PDF
+                            </a>
+
+                            {/* Tombol Edit Kuesioner dan Tutup di sebelah kanan */}
+                            <div className="flex items-center gap-2">
+                                <Link
+                                    href={route("customers.questionnaire.edit", selectedCustomer.id)}
+                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs sm:text-sm font-semibold shadow-sm transition-colors"
+                                >
+                                    <IconPencilCog size={18} />
+                                    Edit Kuesioner
+                                </Link>
+                                {/* <button
+                                    type="button"
+                                    onClick={handleCloseQuestionnaire}
+                                    className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs sm:text-sm font-medium transition-colors"
+                                >
+                                    Tutup
+                                </button> */}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             )}
         </>
     );

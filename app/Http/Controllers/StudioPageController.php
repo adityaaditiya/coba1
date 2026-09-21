@@ -1060,7 +1060,7 @@ class StudioPageController extends Controller
             ])->with('success', 'Data berhasil disimpan.');
         }
 
-        return back()->with('success', 'Transaksi selesai. Booking berhasil dibuat.');
+        return to_route('user.my-schedule')->with('success', 'Transaksi berhasil. Booking Schedule berhasil dibuat.');
     }
 
     public function uploadDropInPaymentProof(Request $request, PilatesBooking $booking): RedirectResponse

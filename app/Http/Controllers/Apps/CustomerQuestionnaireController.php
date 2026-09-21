@@ -11,6 +11,44 @@ use Inertia\Inertia;
 
 class CustomerQuestionnaireController extends Controller
 {
+    public function show(Customer $customer)
+    {
+        $customer->loadMissing('user:id,email');
+
+        $questions = Question::orderBy('order', 'asc')->orderBy('id', 'asc')->get();
+        $existingAnswers = $customer->questionnaireAnswers()
+            ->pluck('answer_value', 'question_id')
+            ->toArray();
+
+        $questionsWithAnswers = $questions->map(function ($question) use ($existingAnswers) {
+            $answer = $existingAnswers[$question->id] ?? null;
+
+            if ($question->input_type === 'checkbox' && $answer) {
+                $decoded = json_decode($answer, true);
+                $answer = is_array($decoded) ? $decoded : [];
+            }
+
+            return [
+                'id' => $question->id,
+                'question_text' => $question->question_text,
+                'input_type' => $question->input_type,
+                'is_required' => (bool) $question->is_required,
+                'options' => $question->options ?? [],
+                'answer' => $answer,
+            ];
+        });
+
+        return response()->json([
+            'customer' => [
+                'id' => $customer->id,
+                'name' => $customer->name,
+                'no_telp' => $customer->no_telp,
+                'email' => $customer->user?->email,
+            ],
+            'questions' => $questionsWithAnswers,
+        ]);
+    }
+
     public function edit(Customer $customer)
     {
         $questions = Question::orderBy('order', 'asc')->orderBy('id', 'asc')->get();

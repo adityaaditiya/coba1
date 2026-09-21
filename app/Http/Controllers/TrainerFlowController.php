@@ -290,6 +290,6 @@ class TrainerFlowController extends Controller
 
     public function exportQuestionnairePdf(\App\Models\Customer $customer)
     {
-        return \App\Support\QuestionnairePdfExport::download($customer);
+        return \App\Support\QuestionnairePdfExport::download($customer, false);
     }
 }

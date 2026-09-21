@@ -37,11 +37,12 @@ export default function Form({ data, setData, errors }) {
                     value={data.input_type}
                     onChange={(e) => {
                         setData("input_type", e.target.value);
-                        // Reset options jika pindah ke tipe text agar validasi di backend lancar
-                        if (e.target.value === 'text') setData("options", []);
+                        // Reset options jika pindah ke tipe text atau number agar validasi di backend lancar
+                        if (['text', 'number'].includes(e.target.value)) setData("options", []);
                     }}
                 >
                     <option value="text">Teks</option>
+                    <option value="number">Nomor</option>
                     <option value="multiple_choice">Pilihan Ganda</option>
                     <option value="checkbox">Checkbox</option>
                 </select>

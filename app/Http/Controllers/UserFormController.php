@@ -17,7 +17,7 @@ class UserFormController extends Controller
 
         abort_unless($customer, 404);
 
-        $questions = Question::query()->oldest('id')->get();
+        $questions = Question::query()->orderBy('order', 'asc')->orderBy('id', 'asc')->get();
         $existingAnswers = $customer->questionnaireAnswers()
             ->pluck('answer_value', 'question_id')
             ->toArray();
@@ -51,7 +51,7 @@ class UserFormController extends Controller
 
         abort_unless($customer, 404);
 
-        $questions = Question::query()->oldest('id')->get();
+        $questions = Question::query()->orderBy('order', 'asc')->orderBy('id', 'asc')->get();
         $rules = [];
 
         foreach ($questions as $question) {
@@ -59,6 +59,11 @@ class UserFormController extends Controller
 
             if ($question->input_type === 'text') {
                 $rules[$field] = $question->is_required ? 'required|string' : 'nullable|string';
+                continue;
+            }
+
+            if ($question->input_type === 'number') {
+                $rules[$field] = $question->is_required ? 'required|numeric' : 'nullable|numeric';
                 continue;
             }
 
@@ -106,5 +111,14 @@ class UserFormController extends Controller
         }
 
         return to_route('user.my-form')->with('success', 'Form kuesioner berhasil disimpan.');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $customer = $request->user()?->customer;
+
+        abort_unless($customer, 404);
+
+        return \App\Support\QuestionnairePdfExport::download($customer);
     }
 }

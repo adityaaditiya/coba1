@@ -106,8 +106,10 @@ Route::middleware('auth')->get('/user/my-appointment', [UserAppointmentControlle
 Route::middleware('auth')->get('/user/my-memberships', [UserMembershipHistoryController::class, 'index'])->name('user.my-memberships');
 Route::middleware('auth')->get('/user/my-form', [UserFormController::class, 'index'])->name('user.my-form');
 Route::middleware('auth')->put('/user/my-form', [UserFormController::class, 'update'])->name('user.my-form.update');
+Route::middleware('auth')->get('/user/my-form/export-pdf', [UserFormController::class, 'exportPdf'])->name('user.my-form.export-pdf');
 Route::middleware('auth')->get('/user/my-flow', [TrainerFlowController::class, 'index'])->name('user.my-flow');
 Route::middleware('auth')->patch('/user/my-flow/attendance', [TrainerFlowController::class, 'updateAttendance'])->name('user.my-flow.attendance');
+Route::middleware('auth')->get('/user/my-flow/questionnaire/{customer}/export-pdf', [TrainerFlowController::class, 'exportQuestionnairePdf'])->name('user.my-flow.questionnaire.export-pdf');
 
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified', 'permission:dashboard-access'])->name('dashboard');
@@ -155,6 +157,12 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
         ->middlewareFor(['create', 'store'], 'permission:questions-create')
         ->middlewareFor(['edit', 'update'], 'permission:questions-edit')
         ->middlewareFor('destroy', 'permission:questions-delete');
+    Route::post('questions/reorder', [QuestionController::class, 'reorder'])
+        ->middleware('permission:questions-edit')
+        ->name('questions.reorder');
+    Route::post('questions/{question}/move', [QuestionController::class, 'move'])
+        ->middleware('permission:questions-edit')
+        ->name('questions.move');
 
     Route::get('customers/{customer}/questionnaire', [CustomerQuestionnaireController::class, 'edit'])
         ->middleware('permission:customers-edit')
@@ -162,6 +170,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::put('customers/{customer}/questionnaire', [CustomerQuestionnaireController::class, 'update'])
         ->middleware('permission:customers-edit')
         ->name('customers.questionnaire.update');
+    Route::get('customers/{customer}/questionnaire/export-pdf', [CustomerQuestionnaireController::class, 'exportPdf'])
+        ->middleware('permission:customers-edit')
+        ->name('customers.questionnaire.export-pdf');
 
     Route::resource('class-categories', ClassCategoryController::class)
         ->middlewareFor(['index', 'show'], 'permission:class-categories-access')

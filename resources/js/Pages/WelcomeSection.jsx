@@ -249,7 +249,7 @@ export default function WelcomeSection({
     const shouldShowAppointmentQuestionnaire = Boolean(requiredQuestionnaire?.should_show) && appointmentQuestionnaireQuestions.length > 0;
     const initialAppointmentQuestionnaireAnswers = useMemo(() =>
         appointmentQuestionnaireQuestions.reduce((acc, question) => {
-            acc[question.id] = question.input_type === "checkbox" ? [] : "";
+            acc[question.id] = question.answer ?? (question.input_type === "checkbox" ? [] : "");
             return acc;
         }, {}),
     [appointmentQuestionnaireQuestions]);
@@ -469,7 +469,7 @@ useEffect(() => {
 
         appointmentQuestionnaireQuestions.forEach((question) => {
             if (!(question.id in updatedAnswers)) {
-                updatedAnswers[question.id] = question.input_type === "checkbox" ? [] : "";
+                updatedAnswers[question.id] = question.answer ?? (question.input_type === "checkbox" ? [] : "");
                 hasChanges = true;
             }
         });
@@ -1840,6 +1840,16 @@ useEffect(() => {
 
                                             {question.input_type === "text" && (
                                                 <textarea
+                                                    required={question.is_required}
+                                                    className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm focus:ring-primary-500"
+                                                    value={appointmentQuestionnaireData.answers[question.id] || ""}
+                                                    onChange={(e) => setAppointmentQuestionnaireData("answers", { ...appointmentQuestionnaireData.answers, [question.id]: e.target.value })}
+                                                />
+                                            )}
+
+                                            {question.input_type === "number" && (
+                                                <input
+                                                    type="number"
                                                     required={question.is_required}
                                                     className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm focus:ring-primary-500"
                                                     value={appointmentQuestionnaireData.answers[question.id] || ""}

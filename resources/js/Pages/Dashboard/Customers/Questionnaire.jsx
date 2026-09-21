@@ -1,6 +1,7 @@
 import React from "react";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { IconFileTypePdf } from "@tabler/icons-react";
 
 export default function Questionnaire({ customer, questions }) {
     const { errors } = usePage().props;
@@ -43,6 +44,15 @@ export default function Questionnaire({ customer, questions }) {
                             />
                         )}
 
+                        {question.input_type === "number" && (
+                            <input
+                                type="number"
+                                className="w-full border rounded-xl p-3"
+                                value={data.answers[question.id] || ""}
+                                onChange={(e) => setData("answers", { ...data.answers, [question.id]: e.target.value })}
+                            />
+                        )}
+
                         {question.input_type === "multiple_choice" && (
                             <select
                                 className="w-full border rounded-xl p-3"
@@ -76,9 +86,20 @@ export default function Questionnaire({ customer, questions }) {
                         )}
                     </div>
                 ))}
-                <div className="flex justify-end gap-3">
-                    <Link href={route("customers.index")} className="px-4 py-2 rounded-xl border">Kembali</Link>
-                    <button disabled={processing} className="px-4 py-2 rounded-xl bg-primary-500 text-white">Simpan Jawaban</button>
+                <div className="flex items-center justify-between gap-3">
+                    <a
+                        href={route("customers.questionnaire.export-pdf", customer.id)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition-colors shadow-sm"
+                    >
+                        <IconFileTypePdf size={18} />
+                        Export PDF
+                    </a>
+                    <div className="flex items-center gap-3">
+                        {/* <Link href={route("customers.index")} className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium transition-colors">Kembali</Link> */}
+                        <button disabled={processing} className="px-4 py-2 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium transition-colors">Simpan Jawaban</button>
+                    </div>
                 </div>
             </form>
         </>

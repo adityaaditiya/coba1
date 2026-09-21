@@ -1,5 +1,6 @@
 import { Head, useForm, usePage } from "@inertiajs/react";
 import Navbar from "@/Components/Landing/Navbar";
+import { IconFileTypePdf } from "@tabler/icons-react";
 
 export default function MyForm({ questions = [] }) {
     const { errors, flash } = usePage().props;
@@ -70,6 +71,20 @@ export default function MyForm({ questions = [] }) {
                                             />
                                         )}
 
+                                        {question.input_type === "number" && (
+                                            <input
+                                                type="number"
+                                                className="w-full rounded-xl border border-slate-300 px-3 py-2"
+                                                value={data.answers[question.id] || ""}
+                                                onChange={(event) =>
+                                                    setData("answers", {
+                                                        ...data.answers,
+                                                        [question.id]: event.target.value,
+                                                    })
+                                                }
+                                            />
+                                        )}
+
                                         {question.input_type === "multiple_choice" && (
                                             <select
                                                 className="w-full rounded-xl border border-slate-300 px-3 py-2"
@@ -117,7 +132,16 @@ export default function MyForm({ questions = [] }) {
                             </div>
                         )}
 
-                        <div className="mt-8 flex justify-end">
+                        <div className="mt-4 flex items-center justify-between border-t border-primary-50 pt-5">
+                            <a
+                                href={route("user.my-form.export-pdf")}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-5 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100 transition shadow-sm"
+                            >
+                                <IconFileTypePdf size={18} />
+                                Export PDF
+                            </a>
                             <button
                                 type="submit"
                                 disabled={processing || questions.length === 0}

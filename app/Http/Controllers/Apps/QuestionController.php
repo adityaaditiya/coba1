@@ -13,7 +13,7 @@ class QuestionController extends Controller
     {
         $questions = Question::when(request()->search, function ($query) {
             $query->where('question_text', 'like', '%' . request()->search . '%');
-        })->latest()->paginate(10)->withQueryString();
+        })->orderBy('order', 'asc')->orderBy('id', 'asc')->paginate(50)->withQueryString();
 
         return Inertia::render('Dashboard/Questionnaires/Questions/Index', [
             'questions' => $questions,
@@ -28,10 +28,62 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         $validated = $this->validateQuestion($request);
+        $validated['order'] = (Question::max('order') ?? 0) + 1;
 
         Question::create($validated);
 
         return to_route('questions.index')->with('success', 'Data berhasil disimpan.');
+    }
+
+    public function move(Request $request, Question $question)
+    {
+        $request->validate([
+            'direction' => 'required|in:up,down',
+        ]);
+
+        $direction = $request->input('direction');
+        $allQuestions = Question::orderBy('order', 'asc')->orderBy('id', 'asc')->get();
+
+        $currentIndex = $allQuestions->search(fn($item) => $item->id === $question->id);
+
+        if ($currentIndex !== false) {
+            $targetIndex = $direction === 'up' ? $currentIndex - 1 : $currentIndex + 1;
+
+            if ($targetIndex >= 0 && $targetIndex < $allQuestions->count()) {
+                $targetQuestion = $allQuestions[$targetIndex];
+
+                $list = $allQuestions->values()->all();
+                $list[$currentIndex] = $targetQuestion;
+                $list[$targetIndex] = $question;
+
+                foreach ($list as $idx => $item) {
+                    $newOrder = $idx + 1;
+                    if ($item->order !== $newOrder) {
+                        $item->update(['order' => $newOrder]);
+                    }
+                }
+            }
+        }
+
+        return back()->with('success', 'Urutan pertanyaan berhasil diperbarui.');
+    }
+
+    public function reorder(Request $request)
+    {
+        $validated = $request->validate([
+            'orders' => 'required|array',
+            'orders.*' => 'integer|exists:questions,id',
+        ]);
+
+        foreach ($validated['orders'] as $index => $id) {
+            Question::where('id', $id)->update(['order' => $index + 1]);
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return back()->with('success', 'Urutan pertanyaan berhasil diperbarui.');
     }
 
     public function edit(Question $question)
@@ -70,7 +122,7 @@ class QuestionController extends Controller
     // 2. Validasi Dasar
     $validated = $request->validate([
         'question_text' => 'required|string|max:1000',
-        'input_type'    => 'required|in:text,multiple_choice,checkbox',
+        'input_type'    => 'required|in:text,number,multiple_choice,checkbox',
         'is_required'   => 'nullable|boolean',
         'options'       => 'nullable|array',
     ]);

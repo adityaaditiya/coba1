@@ -15,11 +15,13 @@ class Question extends Model
         'input_type',
         'is_required',
         'options',
+        'order',
     ];
 
     protected $casts = [
         'is_required' => 'boolean',
         'options' => 'array',
+        'order' => 'integer',
     ];
 
     public function answers(): HasMany

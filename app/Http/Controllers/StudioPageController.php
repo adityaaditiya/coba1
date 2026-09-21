@@ -1230,12 +1230,12 @@ class StudioPageController extends Controller
             ];
         }
 
-        $requiredQuestions = Question::query()
-            ->where('is_required', true)
-            ->oldest('id')
+        $allQuestions = Question::query()
+            ->orderBy('order', 'asc')
+            ->orderBy('id', 'asc')
             ->get();
 
-        if ($requiredQuestions->isEmpty()) {
+        if ($allQuestions->isEmpty()) {
             return [
                 'should_show' => false,
                 'questions' => [],
@@ -1244,11 +1244,12 @@ class StudioPageController extends Controller
 
         $existingAnswers = CustomerAnswer::query()
             ->where('customer_id', $customer->id)
-            ->whereIn('question_id', $requiredQuestions->pluck('id'))
+            ->whereIn('question_id', $allQuestions->pluck('id'))
             ->pluck('answer_value', 'question_id');
 
-        $missingQuestions = $requiredQuestions
-            ->filter(function (Question $question) use ($existingAnswers) {
+        $hasMissingRequired = $allQuestions
+            ->where('is_required', true)
+            ->contains(function (Question $question) use ($existingAnswers) {
                 $answer = $existingAnswers->get($question->id);
 
                 if ($question->input_type === 'checkbox') {
@@ -1258,22 +1259,32 @@ class StudioPageController extends Controller
                 }
 
                 return ! filled($answer);
-            })
-            ->map(function (Question $question) {
+            });
+
+        $questionsPayload = $allQuestions
+            ->map(function (Question $question) use ($existingAnswers) {
+                $answer = $existingAnswers->get($question->id);
+
+                if ($question->input_type === 'checkbox' && $answer) {
+                    $decoded = json_decode((string) $answer, true);
+                    $answer = is_array($decoded) ? $decoded : [];
+                }
+
                 return [
                     'id' => $question->id,
                     'question_text' => $question->question_text,
                     'input_type' => $question->input_type,
                     'is_required' => (bool) $question->is_required,
                     'options' => $question->options ?? [],
+                    'answer' => $answer,
                 ];
             })
             ->values()
             ->all();
 
         return [
-            'should_show' => count($missingQuestions) > 0,
-            'questions' => $missingQuestions,
+            'should_show' => $hasMissingRequired,
+            'questions' => $questionsPayload,
         ];
     }
 
@@ -1289,46 +1300,50 @@ class StudioPageController extends Controller
             ]);
         }
 
-        $requiredQuestions = Question::query()
-            ->where('is_required', true)
-            ->oldest('id')
+        $allQuestions = Question::query()
+            ->orderBy('order', 'asc')
+            ->orderBy('id', 'asc')
             ->get();
 
         $rules = [];
         $submittedAnswers = $request->input('answers', []);
 
-        foreach ($submittedAnswers as $questionId => $value) {
-            $question = $requiredQuestions->firstWhere('id', $questionId);
+        foreach ($allQuestions as $question) {
+            $field = 'answers.'.$question->id;
 
-            if (! $question) {
-                continue;
-            }
-
-            $field = 'answers.'.$questionId;
-
-            if ($question->input_type === 'text') {
-                $rules[$field] = 'required|string';
-            }
-
-            if ($question->input_type === 'multiple_choice') {
-                $rules[$field] = 'required|string';
-            }
-
-            if ($question->input_type === 'checkbox') {
-                $rules[$field] = 'required|array|min:1';
+            if ($question->is_required) {
+                if ($question->input_type === 'text') {
+                    $rules[$field] = 'required|string';
+                } elseif ($question->input_type === 'number') {
+                    $rules[$field] = 'required|numeric';
+                } elseif ($question->input_type === 'multiple_choice') {
+                    $rules[$field] = 'required|string';
+                } elseif ($question->input_type === 'checkbox') {
+                    $rules[$field] = 'required|array|min:1';
+                }
+            } else {
+                if ($question->input_type === 'text') {
+                    $rules[$field] = 'nullable|string';
+                } elseif ($question->input_type === 'number') {
+                    $rules[$field] = 'nullable|numeric';
+                } elseif ($question->input_type === 'multiple_choice') {
+                    $rules[$field] = 'nullable|string';
+                } elseif ($question->input_type === 'checkbox') {
+                    $rules[$field] = 'nullable|array';
+                }
             }
         }
 
         $request->validate($rules);
 
         foreach ($submittedAnswers as $questionId => $value) {
-            $question = $requiredQuestions->firstWhere('id', $questionId);
+            $question = $allQuestions->firstWhere('id', $questionId);
             if (! $question) {
                 continue;
             }
 
             if ($question->input_type === 'checkbox') {
-                $value = json_encode(array_values($value));
+                $value = is_array($value) && count($value) > 0 ? json_encode(array_values($value)) : null;
             }
 
             CustomerAnswer::updateOrCreate(

@@ -13,7 +13,7 @@ class CustomerQuestionnaireController extends Controller
 {
     public function edit(Customer $customer)
     {
-        $questions = Question::oldest('id')->get();
+        $questions = Question::orderBy('order', 'asc')->orderBy('id', 'asc')->get();
         $existingAnswers = $customer->questionnaireAnswers()
             ->pluck('answer_value', 'question_id')
             ->toArray();
@@ -44,7 +44,7 @@ class CustomerQuestionnaireController extends Controller
 
     public function update(Request $request, Customer $customer)
     {
-        $questions = Question::oldest('id')->get();
+        $questions = Question::orderBy('order', 'asc')->orderBy('id', 'asc')->get();
         $rules = [];
 
         foreach ($questions as $question) {
@@ -52,6 +52,11 @@ class CustomerQuestionnaireController extends Controller
 
             if ($question->input_type === 'text') {
                 $rules[$field] = $question->is_required ? 'required|string' : 'nullable|string';
+                continue;
+            }
+
+            if ($question->input_type === 'number') {
+                $rules[$field] = $question->is_required ? 'required|numeric' : 'nullable|numeric';
                 continue;
             }
 
@@ -89,5 +94,10 @@ class CustomerQuestionnaireController extends Controller
         }
 
         return to_route('customers.index')->with('success', 'Data berhasil disimpan.');
+    }
+
+    public function exportPdf(Customer $customer)
+    {
+        return \App\Support\QuestionnairePdfExport::download($customer);
     }
 }

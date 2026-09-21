@@ -63,8 +63,7 @@ class TrainerFlowController extends Controller
                 'bookings.user.customer:id,user_id',
                 'bookings.user.customer.questionnaireAnswers' => fn ($query) => $query
                     ->select('id', 'customer_id', 'question_id', 'answer_value')
-                    ->with('question:id,question_text')
-                    ->orderBy('question_id'),
+                    ->with('question:id,question_text,order'),
             ])
             ->where('trainer_id', $trainerId)
             ->whereBetween('start_at', [$filterStartUtc, $filterEndUtc])
@@ -84,8 +83,7 @@ class TrainerFlowController extends Controller
                 'bookings.customer:id,name',
                 'bookings.customer.questionnaireAnswers' => fn ($query) => $query
                     ->select('id', 'customer_id', 'question_id', 'answer_value')
-                    ->with('question:id,question_text')
-                    ->orderBy('question_id'),
+                    ->with('question:id,question_text,order'),
             ])
             ->where('trainer_id', $trainerId)
             ->whereBetween('start_at', [$filterStartUtc, $filterEndUtc])
@@ -236,7 +234,10 @@ class TrainerFlowController extends Controller
             return [];
         }
 
-        return $answers->map(function (CustomerAnswer $answer) {
+        return $answers->sortBy([
+            fn ($a, $b) => ($a->question?->order ?? 0) <=> ($b->question?->order ?? 0),
+            fn ($a, $b) => ($a->question?->id ?? 0) <=> ($b->question?->id ?? 0),
+        ])->map(function (CustomerAnswer $answer) {
             return [
                 'question' => $answer->question?->question_text ?? '-',
                 'answer' => $this->normalizeAnswerValue($answer->answer_value),
@@ -285,5 +286,10 @@ class TrainerFlowController extends Controller
     private function calculateDurationHours(int $timetableMinutes, int $appointmentMinutes): float
     {
         return round(($timetableMinutes + $appointmentMinutes) / 60, 1);
+    }
+
+    public function exportQuestionnairePdf(\App\Models\Customer $customer)
+    {
+        return \App\Support\QuestionnairePdfExport::download($customer);
     }
 }

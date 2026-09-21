@@ -12,6 +12,7 @@ import {
     IconPlayerPlay,
     IconUser,
     IconX,
+    IconFileTypePdf,
 } from "@tabler/icons-react";
 
 const applyFilters = (filters) => {
@@ -123,6 +124,7 @@ export default function MyFlow({ sessions = [], stats = {}, filters = {}, classT
 
     const openQuestionnaire = (client) => {
         setSelectedQuestionnaire({
+            customerId: client.customer_id,
             clientName: client.name || "-",
             answers: client.questionnaire_answers || [],
         });
@@ -380,6 +382,29 @@ export default function MyFlow({ sessions = [], stats = {}, filters = {}, classT
                                 Peserta ini belum mengisi data kuesioner.
                             </p>
                         )}
+
+                        <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
+                            {selectedQuestionnaire.customerId ? (
+                                <a
+                                    href={route("user.my-flow.questionnaire.export-pdf", selectedQuestionnaire.customerId)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-100 transition shadow-sm"
+                                >
+                                    <IconFileTypePdf size={16} />
+                                    Export PDF
+                                </a>
+                            ) : (
+                                <span />
+                            )}
+                            <button
+                                type="button"
+                                onClick={() => setSelectedQuestionnaire(null)}
+                                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition"
+                            >
+                                Tutup
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

@@ -38,7 +38,7 @@ export default function WelcomeScheduleDetail({ schedule, requiredQuestionnaire 
     // Inisialisasi answers
     const initialAnswers = useMemo(() =>
         questionnaireQuestions.reduce((acc, question) => {
-            acc[question.id] = question.input_type === "checkbox" ? [] : "";
+            acc[question.id] = question.answer ?? (question.input_type === "checkbox" ? [] : "");
             return acc;
         }, {}),
     [questionnaireQuestions]);
@@ -52,7 +52,7 @@ export default function WelcomeScheduleDetail({ schedule, requiredQuestionnaire 
 
         questionnaireQuestions.forEach((q) => {
             if (!(q.id in updatedAnswers)) {
-                updatedAnswers[q.id] = q.input_type === "checkbox" ? [] : "";
+                updatedAnswers[q.id] = q.answer ?? (q.input_type === "checkbox" ? [] : "");
                 hasChanges = true;
             }
         });
@@ -238,6 +238,16 @@ export default function WelcomeScheduleDetail({ schedule, requiredQuestionnaire 
 
                             {question.input_type === "text" && (
                                 <textarea
+                                    required={question.is_required}
+                                    className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm focus:ring-primary-500"
+                                    value={data.answers[question.id] || ""}
+                                    onChange={(e) => setData("answers", { ...data.answers, [question.id]: e.target.value })}
+                                />
+                            )}
+
+                            {question.input_type === "number" && (
+                                <input
+                                    type="number"
                                     required={question.is_required}
                                     className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm focus:ring-primary-500"
                                     value={data.answers[question.id] || ""}
